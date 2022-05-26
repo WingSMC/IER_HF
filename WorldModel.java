@@ -12,10 +12,8 @@ import mining.MiningPlanet.Move;
 public class WorldModel extends GridWorldModel {
 
     public static final int   GOLD  = 16;
-    public static final int   DEPOT = 32;
     public static final int   ENEMY = 64;
 
-    Location                  depot;
     Set<Integer>              agWithGold;  // which agent is carrying gold
     int                       goldsInDepot   = 0;
     int                       initialNbGolds = 0;
@@ -58,13 +56,6 @@ public class WorldModel extends GridWorldModel {
         return id;
     }
 
-    public Location getDepot() {
-        return depot;
-    }
-
-    public int getGoldsInDepot() {
-        return goldsInDepot;
-    }
 
     public boolean isAllGoldsCollected() {
         return goldsInDepot == initialNbGolds;
@@ -80,11 +71,6 @@ public class WorldModel extends GridWorldModel {
 
     public boolean isCarryingGold(int ag) {
         return agWithGold.contains(ag);
-    }
-
-    public void setDepot(int x, int y) {
-        depot = new Location(x, y);
-        data[x][y] = DEPOT;
     }
 
     public void setAgCarryingGold(int ag) {
@@ -140,17 +126,7 @@ public class WorldModel extends GridWorldModel {
     }
 
     boolean drop(int ag) {
-        Location l = getAgPos(ag);
-        if (isCarryingGold(ag)) {
-            if (l.equals(getDepot())) {
-                goldsInDepot++;
-                logger.info("Agent " + (ag + 1) + " carried a gold to depot!");
-            } else {
-                add(WorldModel.GOLD, l.x, l.y);
-            }
-            setAgNotCarryingGold(ag);
-            return true;
-        }
+
         return false;
     }
     
@@ -159,7 +135,14 @@ public class WorldModel extends GridWorldModel {
     static WorldModel world3() throws Exception {
         WorldModel model = WorldModel.create(35, 35, 4);
         model.setId("Scenario 5");
-        model.setDepot(16, 16);
+
+        int x = 35;
+        int y = 35;
+        tester gen = new tester(x, y);
+
+        boolean[][] blueprint= gen.getMatrix();
+        int[] startloc = gen.getStart();
+        
         model.setAgPos(0, 1, 0);
         model.setAgPos(1, 20, 0);
         model.setAgPos(2, 6, 26);
@@ -170,11 +153,6 @@ public class WorldModel extends GridWorldModel {
         model.setAgPos(2, startloc[0], startloc[1]);
         model.setAgPos(3, startloc[0], startloc[1]);
         */
-        int x = 35;
-        int y = 35;
-        tester gen = new tester(x, y);
-        boolean[][] blueprint= gen.getMatrix();
-        int[] startloc = gen.getStart();
         
         for(int i = 0; i < x; i++){
             for(int j = 0; j < y; j++){

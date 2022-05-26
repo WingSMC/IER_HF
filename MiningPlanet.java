@@ -107,12 +107,6 @@ public class MiningPlanet extends jason.environment.Environment {
         simId = w;
         try {
             switch (w) {
-            case 1:
-                model = WorldModel.world1();
-                break;
-            case 2:
-                model = WorldModel.world2();
-                break;
             case 3:
                 model = WorldModel.world3();
                 break;
@@ -122,7 +116,6 @@ public class MiningPlanet extends jason.environment.Environment {
             }
             clearPercepts();
             addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
-            addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getDepot().x + "," + model.getDepot().y + ")"));
             if (hasGUI) {
                 view = new WorldView(model);
                 view.setEnv(this);
