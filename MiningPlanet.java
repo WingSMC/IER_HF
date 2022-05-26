@@ -1,6 +1,6 @@
 package mining;
 
-// Environment code for project jasonTeamSimLocal.mas2j
+
 
 import jason.asSyntax.Literal;
 import jason.asSyntax.Structure;
@@ -14,23 +14,23 @@ public class MiningPlanet extends jason.environment.Environment {
 
     private Logger logger = Logger.getLogger("jasonTeamSimLocal.mas2j." + MiningPlanet.class.getName());
 
-    WorldModel  model;
-    WorldView   view;
+    WorldModel model;
+    WorldView view;
 
-    int     simId    = 3; // type of environment
-    int     nbWorlds = 3;
+    int simId = 3; // type of environment
+    int nbWorlds = 3;
 
-    int     sleep    = 0;
-    boolean running  = true;
-    boolean hasGUI   = true;
+    int sleep = 0;
+    boolean running = true;
+    boolean hasGUI = true;
 
-    public static final int SIM_TIME = 60;  // in seconds
+    public static final int SIM_TIME = 60; // in seconds
 
-    Term                    up       = Literal.parseLiteral("do(up)");
-    Term                    down     = Literal.parseLiteral("do(down)");
-    Term                    right    = Literal.parseLiteral("do(right)");
-    Term                    left     = Literal.parseLiteral("do(left)");
-    Term                    skip     = Literal.parseLiteral("do(skip)");
+    Term up = Literal.parseLiteral("do(up)");
+    Term down = Literal.parseLiteral("do(down)");
+    Term right = Literal.parseLiteral("do(right)");
+    Term left = Literal.parseLiteral("do(left)");
+    Term skip = Literal.parseLiteral("do(skip)");
 
     public enum Move {
         UP, DOWN, RIGHT, LEFT
@@ -39,17 +39,13 @@ public class MiningPlanet extends jason.environment.Environment {
     @Override
     public void init(String[] args) {
         hasGUI = args[2].equals("yes");
-        sleep  = Integer.parseInt(args[1]);
+        sleep = Integer.parseInt(args[1]);
         initWorld(Integer.parseInt(args[0]));
     }
 
-    public int getSimId() {
-        return simId;
-    }
+    public int getSimId() { return simId; }
 
-    public void setSleep(int s) {
-        sleep = s;
-    }
+    public void setSleep(int s) { sleep = s; }
 
     @Override
     public void stop() {
@@ -92,9 +88,7 @@ public class MiningPlanet extends jason.environment.Environment {
         return false;
     }
 
-    private int getAgIdBasedOnName(String agName) {
-        return (Integer.parseInt(agName.substring(5))) - 1;
-    }
+    private int getAgIdBasedOnName(String agName) { return (Integer.parseInt(agName.substring(5))) - 1; }
 
     public void initWorld(int w) {
         simId = w;
@@ -116,14 +110,15 @@ public class MiningPlanet extends jason.environment.Environment {
             updateAgsPercept();
             informAgsEnvironmentChanged();
         } catch (Exception e) {
-            logger.warning("Error creating world "+e);
+            logger.warning("Error creating world " + e);
         }
     }
 
     public void endSimulation() {
         addPercept(Literal.parseLiteral("end_of_simulation(" + simId + ",0)"));
         informAgsEnvironmentChanged();
-        if (view != null) view.setVisible(false);
+        if (view != null)
+            view.setVisible(false);
         WorldModel.destroy();
     }
 
@@ -133,9 +128,7 @@ public class MiningPlanet extends jason.environment.Environment {
         }
     }
 
-    private void updateAgPercept(int ag) {
-        updateAgPercept("miner" + (ag + 1), ag);
-    }
+    private void updateAgPercept(int ag) { updateAgPercept("miner" + (ag + 1), ag); }
 
     private void updateAgPercept(String agName, int ag) {
         clearPercepts(agName);
@@ -157,7 +150,8 @@ public class MiningPlanet extends jason.environment.Environment {
 
 
     private void updateAgPercept(String agName, int x, int y) {
-        if (model == null || !model.inGrid(x,y)) return;
+        if (model == null || !model.inGrid(x, y))
+            return;
         if (model.hasObject(WorldModel.OBSTACLE, x, y)) {
             addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",obstacle)"));
         } else {

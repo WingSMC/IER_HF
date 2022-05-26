@@ -1,5 +1,7 @@
 package mining;
 
+
+
 import jason.environment.grid.GridWorldView;
 
 import java.awt.BorderLayout;
@@ -31,9 +33,7 @@ public class WorldView extends GridWorldView {
         repaint();
     }
 
-    public void setEnv(MiningPlanet env) {
-        this.env = env;
-    }
+    public void setEnv(MiningPlanet env) { this.env = env; }
 
     @Override
     public void initComponents(int width) {
@@ -64,11 +64,11 @@ public class WorldView extends GridWorldView {
         super.drawAgent(g, x, y, c, -1);
         idColor = Color.white;
         g.setColor(idColor);
-        drawString(g, x, y, defaultFont, String.valueOf(id+1));
+        drawString(g, x, y, defaultFont, String.valueOf(id + 1));
     }
 
     public static void main(String[] args) throws Exception {
         MiningPlanet env = new MiningPlanet();
-        env.init(new String[] {"5","50","yes"});
+        env.init(new String[] { "5", "50", "yes" });
     }
 }
