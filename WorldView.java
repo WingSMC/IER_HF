@@ -36,46 +36,26 @@ public class WorldView extends GridWorldView {
 
     public void setEnv(MiningPlanet env) {
         this.env = env;
-        scenarios.setSelectedIndex(env.getSimId()-1);
     }
 
     JLabel    jlMouseLoc;
-    JComboBox scenarios;
-    JSlider   jSpeed;
     JLabel    jGoldsC;
 
     @Override
     public void initComponents(int width) {
         super.initComponents(width);
-        scenarios = new JComboBox();
-        for (int i=1; i<=3; i++) {
-            scenarios.addItem(i);
-        }
         JPanel args = new JPanel();
         args.setLayout(new BoxLayout(args, BoxLayout.Y_AXIS));
 
         JPanel sp = new JPanel(new FlowLayout(FlowLayout.LEFT));
         sp.setBorder(BorderFactory.createEtchedBorder());
-        sp.add(new JLabel("Scenario:"));
-        sp.add(scenarios);
 
-        jSpeed = new JSlider();
-        jSpeed.setMinimum(0);
-        jSpeed.setMaximum(400);
-        jSpeed.setValue(50);
-        jSpeed.setPaintTicks(true);
-        jSpeed.setPaintLabels(true);
-        jSpeed.setMajorTickSpacing(100);
-        jSpeed.setMinorTickSpacing(20);
-        jSpeed.setInverted(true);
         Hashtable<Integer,Component> labelTable = new Hashtable<Integer,Component>();
         labelTable.put( 0, new JLabel("max") );
         labelTable.put( 200, new JLabel("speed") );
         labelTable.put( 400, new JLabel("min") );
-        jSpeed.setLabelTable( labelTable );
         JPanel p = new JPanel(new FlowLayout());
         p.setBorder(BorderFactory.createEtchedBorder());
-        p.add(jSpeed);
 
         args.add(sp);
         args.add(p);
@@ -102,25 +82,6 @@ public class WorldView extends GridWorldView {
         s.add(BorderLayout.WEST, args);
         s.add(BorderLayout.CENTER, msg);
         getContentPane().add(BorderLayout.SOUTH, s);
-
-        // Events handling
-        jSpeed.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                if (env != null) {
-                    env.setSleep((int)jSpeed.getValue());
-                }
-            }
-        });
-
-        scenarios.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ievt) {
-                int w = ((Integer)scenarios.getSelectedItem()).intValue();
-                if (env != null && env.getSimId() != w) {
-                    env.endSimulation();
-                    env.initWorld(w);
-                }
-            }
-        });
 
         getCanvas().addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {

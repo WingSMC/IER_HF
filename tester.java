@@ -1,3 +1,5 @@
+package mining;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class tester {
@@ -40,27 +42,31 @@ public class tester {
         if(randomNum < y){
             matrix[x - 1][randomNum].setIscave(true);
             matrix[x - 2][randomNum].setIscave(true);
-            start = new int[] { x - 1, randomNum };
+            //start = new int[] { x - 1, randomNum };
+            start = new int[] { x - 2, randomNum };
         }
         else if(randomNum < x + y){
             randomNum = randomNum - y;
             matrix[randomNum][y - 1].setIscave(true);
             matrix[randomNum][y - 2].setIscave(true);
-            start = new int[] { randomNum, y - 1 };
+            // start = new int[] { randomNum, y - 1 };
+            start = new int[] { randomNum, y - 2 };
             randomNum = randomNum + y;
         }
         else if(randomNum < x + 2 * y){
             randomNum = randomNum - x - y;
             matrix[0][randomNum].setIscave(true);
             matrix[1][randomNum].setIscave(true);
-            start = new int[] { 0, randomNum };
+            //start = new int[] { 0, randomNum };
+            start = new int[] { 1, randomNum };
             randomNum = randomNum + x + y;
         }
         else {
             randomNum = randomNum - x - 2 * y;
             matrix[randomNum][0].setIscave(true);
             matrix[randomNum][1].setIscave(true);
-            start = new int[] { randomNum, 0 };
+            //start = new int[] { randomNum, 0 };
+            start = new int[] { randomNum, 1 };
             randomNum = randomNum + x + 2 * y;
         }
 

@@ -1,3 +1,5 @@
+package mining;
+
 public class Blocktype {
     boolean checked;
     boolean iscave;

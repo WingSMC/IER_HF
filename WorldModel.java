@@ -153,82 +153,7 @@ public class WorldModel extends GridWorldModel {
         }
         return false;
     }
-
-    /*
-    public void clearAgView(int agId) {
-        clearAgView(getAgPos(agId).x, getAgPos(agId).y);
-    }
-
-    public void clearAgView(int x, int y) {
-        int e1 = ~(ENEMY + ALLY + GOLD);
-        if (x > 0 && y > 0) {
-            data[x - 1][y - 1] &= e1;
-        } // nw
-        if (y > 0) {
-            data[x][y - 1] &= e1;
-        } // n
-        if (x < (width - 1) && y > 0) {
-            data[x + 1][y - 1] &= e1;
-        } // ne
-
-        if (x > 0) {
-            data[x - 1][y] &= e1;
-        } // w
-        data[x][y] &= e1; // cur
-        if (x < (width - 1)) {
-            data[x + 1][y] &= e1;
-        } // e
-
-        if (x > 0 && y < (height - 1)) {
-            data[x - 1][y + 1] &= e1;
-        } // sw
-        if (y < (height - 1)) {
-            data[x][y + 1] &= e1;
-        } // s
-        if (x < (width - 1) && y < (height - 1)) {
-            data[x + 1][y + 1] &= e1;
-        } // se
-    }
-    */
-
-
-    /** no gold/no obstacle world */
-    static WorldModel world1() throws Exception {
-        WorldModel model = WorldModel.create(21, 21, 4);
-        model.setDepot(5, 7);
-        model.setAgPos(0, 1, 0);
-        model.setAgPos(1, 20, 0);
-        model.setAgPos(2, 3, 20);
-        model.setAgPos(3, 20, 20);
-        model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));
-        return model;
-    }
-
-    /** world with gold, no obstacle */
-    static WorldModel world2() throws Exception {
-        WorldModel model = WorldModel.create(35, 35, 4);
-        model.setId("Scenario 4");
-        model.setDepot(5, 27);
-        model.setAgPos(0, 1, 0);
-        model.setAgPos(1, 20, 0);
-        model.setAgPos(2, 3, 20);
-        model.setAgPos(3, 20, 20);
-        model.add(WorldModel.GOLD, 20, 13);
-        model.add(WorldModel.GOLD, 15, 20);
-        model.add(WorldModel.GOLD, 1, 1);
-        model.add(WorldModel.GOLD, 3, 5);
-        model.add(WorldModel.GOLD, 24, 24);
-        model.add(WorldModel.GOLD, 20, 20);
-        model.add(WorldModel.GOLD, 20, 21);
-        model.add(WorldModel.GOLD, 20, 22);
-        model.add(WorldModel.GOLD, 20, 23);
-        model.add(WorldModel.GOLD, 20, 24);
-        model.add(WorldModel.GOLD, 19, 20);
-        model.add(WorldModel.GOLD, 19, 21);
-        model.add(WorldModel.GOLD, 34, 34);
-        model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));
-        return model;
-    }
+    
 
     /** world with gold and obstacles */
     static WorldModel world3() throws Exception {
@@ -239,20 +164,26 @@ public class WorldModel extends GridWorldModel {
         model.setAgPos(1, 20, 0);
         model.setAgPos(2, 6, 26);
         model.setAgPos(3, 20, 20);
+        /*
+        model.setAgPos(0, startloc[0], startloc[1]);
+        model.setAgPos(1, startloc[0], startloc[1]);
+        model.setAgPos(2, startloc[0], startloc[1]);
+        model.setAgPos(3, startloc[0], startloc[1]);
+        */
         int x = 35;
         int y = 35;
         tester gen = new tester(x, y);
         boolean[][] blueprint= gen.getMatrix();
-
+        int[] startloc = gen.getStart();
+        
         for(int i = 0; i < x; i++){
             for(int j = 0; j < y; j++){
                 if(!blueprint[i][j]){
-                    model.add(Generator.OBSTACLE, i, j);
+                    model.add(WorldModel.OBSTACLE, i, j);
                 }
             }
         }
 
-        return model;
         model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));
         return model;
     }
