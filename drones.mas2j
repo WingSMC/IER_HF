@@ -1,0 +1,9 @@
+MAS drones {
+	infrastructure: Local
+
+	environment: Generator(100, 100)
+
+	agents:
+		drone [verbose=1] #5;
+		currier curr;
+}
