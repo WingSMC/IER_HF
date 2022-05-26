@@ -241,7 +241,6 @@ public class WorldModel extends GridWorldModel {
         model.setAgPos(3, 20, 20);
         int x = 35;
         int y = 35;
-        Generator model = Generator.create(x, y, n);
         tester gen = new tester(x, y);
         boolean[][] blueprint= gen.getMatrix();
 
