@@ -34,7 +34,6 @@ public class WorldView extends GridWorldView {
     public void setEnv(MiningPlanet env) {
         this.env = env;
     }
-    JLabel    jGoldsC;
 
     @Override
     public void initComponents(int width) {
@@ -57,10 +56,6 @@ public class WorldView extends GridWorldView {
         s.add(BorderLayout.CENTER, msg);
         getContentPane().add(BorderLayout.SOUTH, s);
 
-    }
-
-    public void udpateCollectedGolds() {
-        WorldModel wm = (WorldModel)model;
     }
 
     @Override

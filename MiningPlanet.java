@@ -31,8 +31,6 @@ public class MiningPlanet extends jason.environment.Environment {
     Term                    right    = Literal.parseLiteral("do(right)");
     Term                    left     = Literal.parseLiteral("do(left)");
     Term                    skip     = Literal.parseLiteral("do(skip)");
-    Term                    pick     = Literal.parseLiteral("do(pick)");
-    Term                    drop     = Literal.parseLiteral("do(drop)");
 
     public enum Move {
         UP, DOWN, RIGHT, LEFT
@@ -80,11 +78,6 @@ public class MiningPlanet extends jason.environment.Environment {
                 result = model.move(Move.LEFT, agId);
             } else if (action.equals(skip)) {
                 result = true;
-            } else if (action.equals(pick)) {
-                result = model.pick(agId);
-            } else if (action.equals(drop)) {
-                result = model.drop(agId);
-                view.udpateCollectedGolds();
             } else {
                 logger.info("executing: " + action + ", but not implemented!");
             }
@@ -119,7 +112,6 @@ public class MiningPlanet extends jason.environment.Environment {
             if (hasGUI) {
                 view = new WorldView(model);
                 view.setEnv(this);
-                view.udpateCollectedGolds();
             }
             updateAgsPercept();
             informAgsEnvironmentChanged();
@@ -151,10 +143,6 @@ public class MiningPlanet extends jason.environment.Environment {
         Location l = model.getAgPos(ag);
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
 
-        if (model.isCarryingGold(ag)) {
-            addPercept(agName, Literal.parseLiteral("carrying_gold"));
-        }
-
         // what's around
         updateAgPercept(agName, l.x - 1, l.y - 1);
         updateAgPercept(agName, l.x - 1, l.y);
@@ -173,12 +161,6 @@ public class MiningPlanet extends jason.environment.Environment {
         if (model.hasObject(WorldModel.OBSTACLE, x, y)) {
             addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",obstacle)"));
         } else {
-            if (model.hasObject(WorldModel.GOLD, x, y)) {
-                addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",gold)"));
-            }
-            if (model.hasObject(WorldModel.ENEMY, x, y)) {
-                addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",enemy)"));
-            }
             if (model.hasObject(WorldModel.AGENT, x, y)) {
                 addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",ally)"));
             }

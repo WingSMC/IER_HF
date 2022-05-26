@@ -14,7 +14,6 @@ public class WorldModel extends GridWorldModel {
     public static final int   GOLD  = 16;
     public static final int   ENEMY = 64;
 
-    Set<Integer>              agWithGold;  // which agent is carrying gold
     int                       goldsInDepot   = 0;
     int                       initialNbGolds = 0;
 
@@ -43,7 +42,6 @@ public class WorldModel extends GridWorldModel {
 
     private WorldModel(int w, int h, int nbAgs) {
         super(w, h, nbAgs);
-        agWithGold = new HashSet<Integer>();
     }
 
     public String getId() {
@@ -67,17 +65,6 @@ public class WorldModel extends GridWorldModel {
 
     public int getInitialNbGolds() {
         return initialNbGolds;
-    }
-
-    public boolean isCarryingGold(int ag) {
-        return agWithGold.contains(ag);
-    }
-
-    public void setAgCarryingGold(int ag) {
-        agWithGold.add(ag);
-    }
-    public void setAgNotCarryingGold(int ag) {
-        agWithGold.remove(ag);
     }
 
     /** Actions **/
@@ -110,23 +97,10 @@ public class WorldModel extends GridWorldModel {
     }
 
     boolean pick(int ag) {
-        Location l = getAgPos(ag);
-        if (hasObject(WorldModel.GOLD, l.x, l.y)) {
-            if (!isCarryingGold(ag)) {
-                remove(WorldModel.GOLD, l.x, l.y);
-                setAgCarryingGold(ag);
-                return true;
-            } else {
-                logger.warning("Agent " + (ag + 1) + " is trying the pick gold, but it is already carrying gold!");
-            }
-        } else {
-            logger.warning("Agent " + (ag + 1) + " is trying the pick gold, but there is no gold at " + l.x + "x" + l.y + "!");
-        }
         return false;
     }
 
     boolean drop(int ag) {
-
         return false;
     }
     
