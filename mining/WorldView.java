@@ -1,7 +1,5 @@
 package mining;
 
-
-
 import jason.environment.grid.GridWorldView;
 
 import java.awt.BorderLayout;
@@ -33,42 +31,24 @@ public class WorldView extends GridWorldView {
         repaint();
     }
 
-    public void setEnv(MiningPlanet env) { this.env = env; }
-
-    @Override
-    public void initComponents(int width) {
-        super.initComponents(width);
-        JPanel args = new JPanel();
-        args.setLayout(new BoxLayout(args, BoxLayout.Y_AXIS));
-
-        JPanel sp = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        sp.setBorder(BorderFactory.createEtchedBorder());
-
-        args.add(sp);
-
-        JPanel msg = new JPanel();
-        msg.setLayout(new BoxLayout(msg, BoxLayout.Y_AXIS));
-        msg.setBorder(BorderFactory.createEtchedBorder());
-
-
-        JPanel s = new JPanel(new BorderLayout());
-        s.add(BorderLayout.WEST, args);
-        s.add(BorderLayout.CENTER, msg);
-        getContentPane().add(BorderLayout.SOUTH, s);
-
+    public void setEnv(MiningPlanet env) {
+        this.env = env;
     }
 
+
+    // adds no. of agent to the picture
     @Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
         Color idColor = Color.black;
         super.drawAgent(g, x, y, c, -1);
         idColor = Color.white;
         g.setColor(idColor);
-        drawString(g, x, y, defaultFont, String.valueOf(id + 1));
+        drawString(g, x, y, defaultFont, String.valueOf(id+1));
     }
 
+    // draws whole environment (agents and map and..)
     public static void main(String[] args) throws Exception {
         MiningPlanet env = new MiningPlanet();
-        env.init(new String[] { "5", "50", "yes" });
+        env.init(new String[] {"50","yes"});
     }
 }
