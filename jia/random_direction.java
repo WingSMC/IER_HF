@@ -1,15 +1,16 @@
 package jia;
 
+
+
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Atom;
 import jason.asSyntax.NumberTerm;
 import jason.asSyntax.Term;
+import mining.WorldModel;
 
 import java.util.Random;
-
-import mining.WorldModel;
 
 
 public class random_direction extends DefaultInternalAction {
