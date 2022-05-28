@@ -1,7 +1,3 @@
-// Environment code for project game-of-life.mas2j
-
-
-
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Structure;
@@ -46,9 +42,7 @@ public class CaveEnvironment extends jason.environment.TimeSteppedEnvironment {
     }
 
     @Override
-    protected void stepStarted(int step) {
-        // logger.info("start step "+step);
-    }
+    protected void stepStarted(int step) {}
 
     private long sum = 0;
 
@@ -68,19 +62,6 @@ public class CaveEnvironment extends jason.environment.TimeSteppedEnvironment {
         }
     }
 
-    void updateNeighbors(int ag) {
-        Location l = model.getAgPos(ag);
-        updateAgPercept(model.getAgId(l.x - 1, l.y - 1));
-        updateAgPercept(model.getAgId(l.x - 1, l.y));
-        updateAgPercept(model.getAgId(l.x - 1, l.y + 1));
-        updateAgPercept(model.getAgId(l.x, l.y - 1));
-        updateAgPercept(model.getAgId(l.x, l.y));
-        updateAgPercept(model.getAgId(l.x, l.y + 1));
-        updateAgPercept(model.getAgId(l.x + 1, l.y - 1));
-        updateAgPercept(model.getAgId(l.x + 1, l.y));
-        updateAgPercept(model.getAgId(l.x + 1, l.y + 1));
-    }
-
     void updateAgPercept(int ag) {
         String name = "cell" + (ag + 1);
         updateAgPercept(name, ag);
@@ -88,10 +69,7 @@ public class CaveEnvironment extends jason.environment.TimeSteppedEnvironment {
 
     void updateAgPercept(String agName, int ag) {
         clearPercepts(agName);
-        Location l = model.getAgPos(ag);
-
-        Literal lAlive = ASSyntax.createLiteral("alive_neighbors", ASSyntax.createNumber(alive % 4));
-        addPercept(agName, lAlive);
+        addPercept(agName, ASSyntax.createLiteral("alive_neighbors", ASSyntax.createNumber(3)));
         addPercept(agName, ASSyntax.createLiteral("step", ASSyntax.createNumber(getStep())));
     }
 }

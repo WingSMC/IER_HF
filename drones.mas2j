@@ -1,0 +1,9 @@
+MAS drones {
+    infrastructure: Local
+
+    // grid size, density
+    environment: CaveEnvironment(30,50)
+
+    agents:
+        drone #5;
+}
