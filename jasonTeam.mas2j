@@ -12,4 +12,6 @@ MAS drones {
 
     agents:
         drone #2;
-}   
+        mecha #1;
+
+}

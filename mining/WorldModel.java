@@ -161,7 +161,7 @@ public class WorldModel extends GridWorldModel {
         int excavator_num = 4;
         int x = 35;
         int y = 35;
-        WorldModel model = WorldModel.create(x, y, 2);
+        WorldModel model = WorldModel.create(x, y, 3);
         model.setId("Scenario 5");
 
         tester gen = new tester(x, y);
@@ -180,6 +180,8 @@ public class WorldModel extends GridWorldModel {
 
         model.setAgPos(0, startloc[0], startloc[1]);
         model.setAgPos(1, startloc[0], startloc[1]);
+        //nem rajzolódik meg
+        model.setAgPos(2, depotloc[0], depotloc[1]);
         
         model.setDepot(depotloc[0], depotloc[1]);
         

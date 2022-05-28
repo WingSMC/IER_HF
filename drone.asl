@@ -1,29 +1,33 @@
 /* Initial beliefs and rules */
 
 last_dir(null).
-nemkelljavitas.
+onfire.
 
 /* Initial goals */
 !checkExcavator1.
 
 /* Plans */
-+!checkExcavator1:  nemkelljavitas  <- ?excavator1(_,X,Y);
++!checkExcavator1:  onfire  <- ?excavator1(_,X,Y);
  !pos(X,Y);
+ !checkThis(X,Y);
  !!checkExcavator2.
 
 
-+!checkExcavator2:  nemkelljavitas  <- ?excavator2(_,X,Y);
++!checkExcavator2:  onfire  <- ?excavator2(_,X,Y);
  !pos(X,Y);
+ !checkThis(X,Y);
  !!checkExcavator3.
  
  
-+!checkExcavator3:  nemkelljavitas  <- ?excavator3(_,X,Y);
++!checkExcavator3:  onfire  <- ?excavator3(_,X,Y);
  !pos(X,Y);
+ !checkThis(X,Y);
  !!checkExcavator4.
  
  
- +!checkExcavator4:  nemkelljavitas  <- ?excavator4(_,X,Y);
+ +!checkExcavator4:  onfire  <- ?excavator4(_,X,Y);
   !pos(X,Y);
+  !checkThis(X,Y);
   !!checkExcavator1.
  
 
@@ -31,15 +35,23 @@ nemkelljavitas.
  +!checkExcavator2:  true <- .print("waiting2").
  +!checkExcavator3:  true <- .print("waiting3").
  +!checkExcavator4:  true <- .print("waiting4").
- -nemkelljavitas.
 
++!checkThis(X,Y) : jia.check(X,Y) <- true.
++!checkThis(X,Y) : true <- .print("ÉgS" , Y);
+!pos(X,Y);
+.broadcast(tell, repair(X,Y));
+-onfire.
 
++mehetTovabb[source(mechanic2)] : true <- .print("karbantarto sent done");
++nemkelljavitas;
+-mehetTovabb[source(mechanic2)];
+!checkSensor1.
 
 +!pos(X,Y) : pos(X,Y) <- true.
 
 +!pos(X,Y) : pos(X,Y) <- .print("I've reached ",X,"x",Y).
 
-+!pos(X,Y) : not pos(X,Y) & nemkelljavitas <- !next_step(X,Y);
++!pos(X,Y) : not pos(X,Y) & onfire <- !next_step(X,Y);
 !pos(X,Y).
 +!next_step(X,Y)
 :  pos(AgX,AgY)

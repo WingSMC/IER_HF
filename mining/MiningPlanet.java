@@ -145,12 +145,17 @@ public class MiningPlanet extends jason.environment.Environment {
 
     private void updateAgsPercept() {
         for (int i = 0; i < model.getNbOfAgs(); i++) {
+            System.out.println(model.getNbOfAgs());
+            System.out.println(i);
             updateAgPercept(i);
         }
     }
 
     private void updateAgPercept(int ag) {
-        updateAgPercept("drone" + (ag + 1), ag);
+        if(ag == 0) updateAgPercept("drone" + (ag + 1), ag);
+    	if(ag == 1) updateAgPercept("drone" + (ag + 1), ag);
+    	if(ag == 2) updateAgPercept("mechanic" + (ag + 1), ag);
+
     }
 
     private void updateAgPercept(String agName, int ag) {
