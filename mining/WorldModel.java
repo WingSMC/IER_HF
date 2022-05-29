@@ -1,38 +1,37 @@
 package mining;
 
+
+
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import mining.MiningPlanet.Move;
 
 public class WorldModel extends GridWorldModel {
 
-    public static final int   DEPOT = 8;
-    public static final int   GOLD  = 16;
-    public static final int   EXCAVATOR = 32;
-    public static final int   ENEMY = 64;
+    public static final int DEPOT = 8;
+    public static final int GOLD = 16;
+    public static final int EXCAVATOR = 32;
+    public static final int ENEMY = 64;
 
-    Location                  depot;
-    Location                  startpoz;
-    int                       goldsInDepot   = 0;
-    int                       initialNbGolds = 0;
-    Location				  Excavator1;
-    Location				  Excavator2;
-    Location				  Excavator3;
-    Location				  Excavator4;
+    Location depot;
+    Location startpoz;
+    int goldsInDepot = 0;
+    int initialNbGolds = 0;
+    public final List<Location> excavators = new ArrayList<>();
 
-    private Logger            logger   = Logger.getLogger("jasonTeamSimLocal.mas2j." + WorldModel.class.getName());
+    private Logger logger = Logger.getLogger("jasonTeamSimLocal.mas2j." + WorldModel.class.getName());
 
-    private String            id = "WorldModel";
+    private String id = "WorldModel";
 
     // singleton pattern
     protected static WorldModel model = null;
 
-    //width, heigth, number of agents
+    // width, heigth, number of agents
     synchronized public static WorldModel create(int w, int h, int nbAgs) {
         if (model == null) {
             model = new WorldModel(w, h, nbAgs);
@@ -40,86 +39,55 @@ public class WorldModel extends GridWorldModel {
         return model;
     }
 
-    public static WorldModel get() {
-        return model;
-    }
+    public static WorldModel get() { return model; }
 
-    public static void destroy() {
-        model = null;
-    }
+    public static void destroy() { model = null; }
 
     public void setDepot(int x, int y) {
         depot = new Location(x, y);
         data[x][y] = DEPOT;
     }
 
-    public Location getDepot() {
-        return depot;
-    }
+    public Location getDepot() { return depot; }
 
-    private WorldModel(int w, int h, int nbAgs) {
-        super(w, h, nbAgs);
-    }
+    private WorldModel(int w, int h, int nbAgs) { super(w, h, nbAgs); }
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String toString() {
-        return id;
-    }
+    public String getId() { return id; }
 
-    public int getDroneX(){
-        return startpoz.x;
-    }
+    public void setId(String id) { this.id = id; }
 
-    public int getDroneY(){
-        return startpoz.y;
-    }
+    public String toString() { return id; }
+
+    public int getDroneX() { return startpoz.x; }
+
+    public int getDroneY() { return startpoz.y; }
 
     public Location getExcavator(int i) {
-    	logger.info("called");
-    	switch (i) {
-    	case 1:    	logger.info("called1" + Excavator1.x); return Excavator1; 
-    	case 2: return Excavator2;
-    	case 3: return Excavator3;
-    	case 4: return Excavator4;
-    	}
-    	return null;
-    	
+        if (i <= 0 || excavators.size() < i)
+            return null;
+        return excavators.get(i);
     }
 
-    
+
     public void setExcavator(int[][] excavator_loc) {
-        Excavator1 = new Location(excavator_loc[0][0], excavator_loc[0][1]);
-    	Excavator2 = new Location(excavator_loc[1][0], excavator_loc[1][1]);
-    	Excavator3 = new Location(excavator_loc[2][0], excavator_loc[2][1]);
-    	Excavator4 = new Location(excavator_loc[3][0], excavator_loc[3][1]);
+        excavators.add(new Location(excavator_loc[0][0], excavator_loc[0][1]));
+        excavators.add(new Location(excavator_loc[1][0], excavator_loc[1][1]));
+        excavators.add(new Location(excavator_loc[2][0], excavator_loc[2][1]));
+        excavators.add(new Location(excavator_loc[3][0], excavator_loc[3][1]));
         /*
-        data[1][2] = EXCAVATOR;
-    	data[1][4] = EXCAVATOR;
-    	data[1][6] = EXCAVATOR;
-    	data[1][8] = EXCAVATOR;
-        */
+         * data[1][2] = EXCAVATOR; data[1][4] = EXCAVATOR; data[1][6] =
+         * EXCAVATOR; data[1][8] = EXCAVATOR;
+         */
     }
 
 
-    public boolean isAllGoldsCollected() {
-        return goldsInDepot == initialNbGolds;
-    }
+    public boolean isAllGoldsCollected() { return goldsInDepot == initialNbGolds; }
 
-    public void setInitialNbGolds(int i) {
-        initialNbGolds = i;
-    }
+    public void setInitialNbGolds(int i) { initialNbGolds = i; }
 
-    public int getInitialNbGolds() {
-        return initialNbGolds;
-    }
+    public int getInitialNbGolds() { return initialNbGolds; }
 
     /** Actions **/
-
     boolean move(Move dir, int ag) throws Exception {
         Location l = getAgPos(ag);
         switch (dir) {
@@ -147,18 +115,13 @@ public class WorldModel extends GridWorldModel {
         return true;
     }
 
-    boolean pick(int ag) {
-        return false;
-    }
+    boolean pick(int ag) { return false; }
 
-    boolean drop(int ag) {
-        return false;
-    }
-    
+    boolean drop(int ag) { return false; }
+
 
     /** world with gold and obstacles */
     static WorldModel world3() throws Exception {
-        int excavator_num = 4;
         int x = 35;
         int y = 35;
         WorldModel model = WorldModel.create(x, y, 3);
@@ -166,13 +129,13 @@ public class WorldModel extends GridWorldModel {
 
         tester gen = new tester(x, y);
 
-        boolean[][] blueprint= gen.getMatrix();
+        boolean[][] blueprint = gen.getMatrix();
         int[] startloc = gen.getStart();
         int[] depotloc = gen.getDepot();
         model.startpoz = new Location(startloc[0], startloc[1]);
 
         int[][] excavator_loc = gen.generate_excavator(4);
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             System.out.println("excavator: " + excavator_loc[i][0] + " " + excavator_loc[i][1]);
         }
 
@@ -180,14 +143,14 @@ public class WorldModel extends GridWorldModel {
 
         model.setAgPos(0, startloc[0], startloc[1]);
         model.setAgPos(1, startloc[0], startloc[1]);
-        //nem rajzolódik meg
+        // nem rajzolódik meg
         model.setAgPos(2, depotloc[0], depotloc[1]);
-        
+
         model.setDepot(depotloc[0], depotloc[1]);
-        
-        for(int i = 0; i < x; i++){
-            for(int j = 0; j < y; j++){
-                if(!blueprint[i][j]){
+
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if (!blueprint[i][j]) {
                     model.add(WorldModel.OBSTACLE, i, j);
                 }
             }
