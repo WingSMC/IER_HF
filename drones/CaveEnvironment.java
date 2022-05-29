@@ -20,7 +20,6 @@ public class CaveEnvironment extends jason.environment.Environment {
     CaveView view;
 
     int simId = 0;
-    int nbWorlds = 3;
     int sleep = 50;
     boolean running = true;
     boolean hasGUI = true;
@@ -34,12 +33,8 @@ public class CaveEnvironment extends jason.environment.Environment {
         this.simId = Integer.parseInt(args[0]);
         sleep = Integer.parseInt(args[1]);
         hasGUI = args[2].equals("yes");
-        initWorld();
+        initWorld(Integer.parseInt(args[3]));
     }
-
-    public int getSimId() { return simId; }
-
-    public void setSleep(int s) { sleep = s; }
 
     @Override
     public void stop() {
@@ -86,26 +81,23 @@ public class CaveEnvironment extends jason.environment.Environment {
         return false;
     }
 
-    private int getAgIdBasedOnName(String agName) { return (Integer.parseInt(agName.substring(5))) - 1; }
-
-    public void initWorld() {
+    public void initWorld(int size) {
         try {
-            model = CaveModel.world();
+            model = CaveModel.world(size);
         } catch (Exception e) {
             logger.warning("Error creating world: " + e.getMessage());
         }
 
         try {
-            // perceptek hozzaadasa
             clearPercepts();
             addPercept(ASSyntax.createLiteral("pos", ASSyntax.createNumber(model.getDroneX()), ASSyntax.createNumber(model.getDroneY())));
             addPercept(ASSyntax.createLiteral("poz", ASSyntax.createNumber(model.getMechaX()), ASSyntax.createNumber(model.getMechaY())));
             addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
             addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getMechaX() + "," + model.getMechaY() + ")"));
-            addPercept(Literal.parseLiteral("excavator1(" + simId + "," + model.getExcavator(0).x + "," + model.getExcavator(0).y + ")"));
-            addPercept(Literal.parseLiteral("excavator2(" + simId + "," + model.getExcavator(1).x + "," + model.getExcavator(1).y + ")"));
-            addPercept(Literal.parseLiteral("excavator3(" + simId + "," + model.getExcavator(2).x + "," + model.getExcavator(2).y + ")"));
-            addPercept(Literal.parseLiteral("excavator4(" + simId + "," + model.getExcavator(3).x + "," + model.getExcavator(3).y + ")"));
+            addPercept(Literal.parseLiteral("excavator1(" + simId + "," + model.getExcavator(0).loc.x + "," + model.getExcavator(0).loc.y + ")"));
+            addPercept(Literal.parseLiteral("excavator2(" + simId + "," + model.getExcavator(1).loc.x + "," + model.getExcavator(1).loc.y + ")"));
+            addPercept(Literal.parseLiteral("excavator3(" + simId + "," + model.getExcavator(2).loc.x + "," + model.getExcavator(2).loc.y + ")"));
+            addPercept(Literal.parseLiteral("excavator4(" + simId + "," + model.getExcavator(3).loc.x + "," + model.getExcavator(3).loc.y + ")"));
 
             if (hasGUI) {
                 view = new CaveView(model, this);
@@ -136,36 +128,25 @@ public class CaveEnvironment extends jason.environment.Environment {
     private void updateAgPercept(int ag) {
         if (ag == 0)
             updateAgPerceptDrone("drone" + (ag + 1), ag);
-        if (ag == 1)
+        else if (ag == 1)
             updateAgPerceptMecha("mecha" + (ag + 1), ag);
-
     }
 
     private void updateAgPerceptDrone(String agName, int ag) {
         clearPercepts(agName);
-        // its location
-        Location l = model.getAgPos(ag);
+        var l = model.getAgPos(ag);
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
-
-        // what's around
-        updateAgPercept(agName, l.x - 1, l.y - 1);
-        updateAgPercept(agName, l.x - 1, l.y);
-        updateAgPercept(agName, l.x - 1, l.y + 1);
-        updateAgPercept(agName, l.x, l.y - 1);
-        updateAgPercept(agName, l.x, l.y);
-        updateAgPercept(agName, l.x, l.y + 1);
-        updateAgPercept(agName, l.x + 1, l.y - 1);
-        updateAgPercept(agName, l.x + 1, l.y);
-        updateAgPercept(agName, l.x + 1, l.y + 1);
+        updateHelper(agName, l);
     }
 
     private void updateAgPerceptMecha(String agName, int ag) {
         clearPercepts(agName);
-        // its location
-        Location l = model.getAgPos(ag);
+        var l = model.getAgPos(ag);
         addPercept(agName, Literal.parseLiteral("poz(" + l.x + "," + l.y + ")"));
+        updateHelper(agName, l);
+    }
 
-        // what's around
+    private void updateHelper(String agName, Location l) {
         updateAgPercept(agName, l.x - 1, l.y - 1);
         updateAgPercept(agName, l.x - 1, l.y);
         updateAgPercept(agName, l.x - 1, l.y + 1);
@@ -176,7 +157,6 @@ public class CaveEnvironment extends jason.environment.Environment {
         updateAgPercept(agName, l.x + 1, l.y);
         updateAgPercept(agName, l.x + 1, l.y + 1);
     }
-
 
     private void updateAgPercept(String agName, int x, int y) {
         if (model == null || !model.inGrid(x, y))
@@ -190,4 +170,8 @@ public class CaveEnvironment extends jason.environment.Environment {
         }
     }
 
+
+    public void setSleep(int s) { sleep = s; }
+
+    private int getAgIdBasedOnName(String agName) { return (Integer.parseInt(agName.substring(5))) - 1; }
 }

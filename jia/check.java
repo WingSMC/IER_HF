@@ -1,21 +1,23 @@
 package jia;
 
-import java.util.concurrent.ThreadLocalRandom;
 
+
+import drones.CaveModel;
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
-import jason.asSyntax.NumberTerm;
 import jason.asSyntax.Term;
-import jason.environment.grid.Location;
+import jason.asSyntax.NumberTerm;
 
 public class check extends DefaultInternalAction {
+    CaveModel model = CaveModel.get();
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] terms) throws Exception {
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 100);
-        if(randomNum > 75)
+        int i = (int) ((NumberTerm) terms[0]).solve();
+        var ex = model.getExcavator(i);
+        if (ex == null)
             return false;
-        return true;
+        return ex.isFaulty();
     }
 }

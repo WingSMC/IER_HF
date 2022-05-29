@@ -8,7 +8,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -16,7 +15,6 @@ import javax.swing.JPanel;
 
 
 public class CaveView extends GridWorldView {
-    private Logger logger = Logger.getLogger("drones.mas2j." + this.getClass().getSimpleName());
     CaveEnvironment env = null;
     CaveModel model;
 
@@ -51,19 +49,6 @@ public class CaveView extends GridWorldView {
     }
 
     @Override
-    public void paint(Graphics g) {
-        logger.info("paint");
-        super.paint(g);
-        var excavators = ((CaveModel) model).excavators;
-        excavators.stream().forEach(e -> {
-            int x = e.x;
-            int y = e.y;
-            g.setColor(Color.YELLOW);
-            g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
-        });
-    }
-
-    @Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
         Color idColor = Color.black;
         super.drawAgent(g, x, y, c, -1);
@@ -74,15 +59,15 @@ public class CaveView extends GridWorldView {
 
     @Override
     public void draw(Graphics g, int x, int y, int object) {
-        super.draw(g, x, y, object);
         switch (object) {
         case CaveModel.DEPOT:
-            g.setColor(Color.RED);
+            g.setColor(Color.YELLOW);
             g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
             return;
         case CaveModel.EXCAV:
-            g.setColor(Color.YELLOW);
-            g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
+            var excav = model.getExcavator(x, y);
+            if (excav != null)
+                excav.draw(g, cellSizeW, cellSizeH);
             return;
         case CaveModel.AGENT:
             return;

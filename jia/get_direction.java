@@ -22,7 +22,7 @@ import busca.Nodo;
 import drones.CaveModel;
 
 public class get_direction extends DefaultInternalAction {
-    
+
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] terms) throws Exception {
         try {
@@ -39,7 +39,7 @@ public class get_direction extends DefaultInternalAction {
                 Busca searchAlg = new AEstrela();
                 // searchAlg.setMaxAbertos(1000);
                 Location lini = new Location(iagx, iagy);
-                
+
                 // destination should be a free place
                 while (!model.isFreeOfObstacle(itox, itoy) && itox > 0)
                     itox--;
@@ -83,7 +83,7 @@ class GridState implements Estado, Heuristica {
     Location from, to;
     String op;
     GridWorldModel model;
-    
+
     public GridState(Location l, Location from, Location to, GridWorldModel model, String op) {
         this.pos = l;
         this.from = from;
@@ -109,13 +109,13 @@ class GridState implements Estado, Heuristica {
         suc(s, new Location(pos.x, pos.y + 1), "down");
         return s;
     }
-    
+
     private void suc(List<Estado> s, Location newl, String op) {
         if (model.isFree(newl) || (from.distance(newl) > 3 && model.isFreeOfObstacle(newl))) {
             s.add(new GridState(newl, from, to, model, op));
         }
     }
-    
+
     public boolean equals(Object o) {
         try {
             GridState m = (GridState) o;

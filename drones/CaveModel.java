@@ -7,22 +7,17 @@ import jason.environment.grid.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import drones.CaveEnvironment.Move;
 
 public class CaveModel extends GridWorldModel {
-    // 0:clean; 2:agent; 4:obstacle
+    // 0:clean; 2(<<1):agent; (<<2)4:obstacle
     public static final int DEPOT = 1 << 3;
     public static final int EXCAV = 1 << 4;
-
     Location startpoz;
     Location depotpoz;
-    public final List<Location> excavators = new ArrayList<>();
-
-    private Logger logger = Logger.getLogger("drones.mas2j." + this.getClass().getSimpleName());
-
-    private String id = "WorldModel";
+    private final List<Excavator> excavators = new ArrayList<>();
+    private String id = "Cave";
 
     // singleton
     protected static CaveModel model = null;
@@ -46,8 +41,6 @@ public class CaveModel extends GridWorldModel {
 
     public String getId() { return id; }
 
-    public void setId(String id) { this.id = id; }
-
     public int getDroneX() { return startpoz.x; }
 
     public int getDroneY() { return startpoz.y; }
@@ -55,20 +48,6 @@ public class CaveModel extends GridWorldModel {
     public int getMechaX() { return depotpoz.x; }
 
     public int getMechaY() { return depotpoz.y; }
-
-    public Location getExcavator(int i) {
-        if (i < 0 || excavators.size() <= i)
-            return null;
-        return excavators.get(i);
-    }
-
-
-    public void setExcavator(int[][] excavator_loc) {
-        excavators.add(new Location(excavator_loc[0][0], excavator_loc[0][1]));
-        excavators.add(new Location(excavator_loc[1][0], excavator_loc[1][1]));
-        excavators.add(new Location(excavator_loc[2][0], excavator_loc[2][1]));
-        excavators.add(new Location(excavator_loc[3][0], excavator_loc[3][1]));
-    }
 
     /** Actions **/
     boolean move(Move dir, int ag) throws Exception {
@@ -98,47 +77,58 @@ public class CaveModel extends GridWorldModel {
         return true;
     }
 
-    boolean pick(int ag) { return false; }
+    public Excavator getExcavator(int i) {
+        if (i < 0 || excavators.size() <= i)
+            return null;
+        return excavators.get(i);
+    }
 
-    boolean drop(int ag) { return false; }
-
-
-    /** world with gold and obstacles */
-    static CaveModel world() throws Exception {
-        int x = 35;
-        int y = 35;
-        CaveModel model = CaveModel.create(x, y, 2);
-        model.setId("Scenario 5");
-
-        Generator gen = new Generator(x, y);
-
-        boolean[][] blueprint = gen.getMatrix();
-        int[] startloc = gen.getStart();
-        int[] depotloc = gen.getDepot();
-        model.startpoz = new Location(startloc[0], startloc[1]);
-        model.depotpoz = new Location(depotloc[0], depotloc[1]);
-
-        int[][] excavator_loc = gen.generate_excavator(4);
-
-        model.setExcavator(excavator_loc);
-        model.setObject(DEPOT, depotloc[0], depotloc[1]);
-        model.setAgPos(0, startloc[0], startloc[1]);
-        model.setAgPos(1, depotloc[0], depotloc[1]);
-        for (final var exc : excavator_loc) {
-            model.setObject(EXCAV, exc[0], exc[1]);
+    public Excavator getExcavator(int x, int y) {
+        for (Excavator e : excavators) {
+            if (x == e.loc.x && y == e.loc.y) {
+                return e;
+            }
         }
+        return null;
+    }
 
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
+    private void setExcavator(int[][] excavator_loc) {
+        for (int[] is : excavator_loc) {
+            excavators.add(new Excavator(new Location(is[0], is[1])));
+        }
+    }
+
+    @Override
+    public String toString() { return id; }
+
+
+    /** world setup */
+    static CaveModel world(int size) throws Exception {
+        CaveModel model = CaveModel.create(size, size, 2);
+        Generator gen = new Generator(size, size);
+        boolean[][] blueprint = gen.getMatrix();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (!blueprint[i][j]) {
                     model.add(CaveModel.OBSTACLE, i, j);
                 }
             }
         }
+
+        int[] startloc = gen.getStart();
+        int[] depotloc = gen.getDepot();
+        int[][] excavator_loc = gen.generate_excavator(4);
+        model.startpoz = new Location(startloc[0], startloc[1]);
+        model.depotpoz = new Location(depotloc[0], depotloc[1]);
+
+        model.setExcavator(excavator_loc);
+        model.setObject(DEPOT, depotloc[0], depotloc[1]);
+        model.setAgPos(0, startloc[0], startloc[1]);
+        model.setAgPos(1, depotloc[0], depotloc[1]);
+
+        for (final var exc : excavator_loc) {
+            model.setObject(EXCAV, exc[0], exc[1]);
+        }
         return model;
     }
-
-
-    @Override
-    public String toString() { return id; }
 }
