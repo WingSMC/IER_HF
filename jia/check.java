@@ -16,7 +16,6 @@ public class check extends DefaultInternalAction {
     public Object execute(TransitionSystem ts, Unifier un, Term[] terms) throws Exception {
         int i = (int) ((NumberTerm) terms[0]).solve();
         var ex = model.getExcavator(i);
-        System.out.println(ex + " " + ex.isFaulty());
         if (ex == null)
             return false;
         return !ex.isFaulty();
