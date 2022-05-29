@@ -20,7 +20,7 @@ last_dir(null). // the last movement I did
 
 
 /* karbantartasra van sz ks g */
-+repair(X,Y)[source(drone1)] : ~resetloc
++repairsignal(X,Y)[source(drone1)] : ~resetloc
     <-!poz(X,Y);
     .print("starting repair");
     jia.repair(X,Y);

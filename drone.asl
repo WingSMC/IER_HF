@@ -39,28 +39,28 @@ issafe.
 
 +!checkThis1(X,Y) : jia.check(0) <- true.
 +!checkThis1(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repair(X + 1,Y));
+    .broadcast(tell, repairsignal(X,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis2(X,Y) : jia.check(1) <- true.
 +!checkThis2(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repair(X + 1,Y));
+    .broadcast(tell, repairsignal(X,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis3(X,Y) : jia.check(2) <- true.
 +!checkThis3(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repair(X + 1,Y));
+    .broadcast(tell, repairsignal(X,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis4(X,Y) : jia.check(3) <- true.
 +!checkThis4(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repair(X + 1,Y));
+    .broadcast(tell, repairsignal(X,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.

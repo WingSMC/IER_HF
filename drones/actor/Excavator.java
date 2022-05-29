@@ -49,7 +49,7 @@ public class Excavator {
 
 	public boolean isFaulty() {
 		this.isFaulty = new Random().nextInt(100) < 40;
-		System.out.println("loc: " + loc.x + " " + loc.y + "faulty: " + this.isFaulty);
+		System.out.println("faulty: " + this.isFaulty);
 		return isFaulty;
 	}
 
