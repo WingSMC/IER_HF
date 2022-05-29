@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import drones.CaveEnvironment.Move;
+import drones.actor.Excavator;
 
 public class CaveModel extends GridWorldModel {
     // 0:clean; 2(<<1):agent; (<<2)4:obstacle

@@ -1,12 +1,10 @@
-package drones;
+package drones.actor;
 
 
 
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,14 +13,16 @@ import jason.environment.grid.Location;
 
 public class Excavator {
 	public final Location loc;
-	private static BufferedImage image;
+	private static BufferedImage excavatorImg;
+	private static BufferedImage fireImg;
 	boolean isFaulty = false;
 
 	static {
 		try {
-			image = ImageIO.read(new File("resources", "excavator.png"));
+			excavatorImg = ImageIO.read(new File("img", "excavator.png"));
+			fireImg = ImageIO.read(new File("img", "fire.png"));
 		} catch (IOException e) {
-			System.err.println("Could not load excavator image.");
+			System.err.println("Could not load excavator/fire.png");
 		}
 	}
 
@@ -32,10 +32,11 @@ public class Excavator {
 	}
 
 	public void draw(java.awt.Graphics g, int cellSizeW, int cellSizeH) {
-		var color = isFaulty ? Color.RED : Color.GREEN;
-		g.setColor(color);
-		g.drawImage(Excavator.image, loc.x * cellSizeW + 1, loc.y * cellSizeH + 1, cellSizeW, cellSizeH, color, null);
-		g.drawRect(loc.x * cellSizeW + 1, loc.y * cellSizeH + 1, cellSizeW, cellSizeH);
+		g.drawImage(Excavator.excavatorImg, loc.x * cellSizeW + 1, loc.y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2, null, null);
+		if (isFaulty) {
+			int halfCellW = cellSizeW / 2, halfCellH = cellSizeH / 2;
+			g.drawImage(Excavator.fireImg, loc.x * cellSizeW + 1, loc.y * cellSizeH + 1, halfCellW, halfCellH, null, null);
+		}
 	}
 
 

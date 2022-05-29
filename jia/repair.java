@@ -5,7 +5,6 @@ package jia;
 import java.util.stream.Stream;
 
 import drones.CaveModel;
-import drones.Excavator;
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
