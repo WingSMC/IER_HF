@@ -1,13 +1,18 @@
+/* Initial beliefs and rules */
+
 last_dir(null).
 issafe.
 
+/* Initial goals */
 !checkExcavator1.
 
+/* Plans */
 +!checkExcavator1:  issafe  <-
     ?excavator1(_,X,Y);
     !pos(X,Y);
     !checkThis1(X,Y);
     !!checkExcavator2.
+
 
 +!checkExcavator2:  issafe  <-
     ?excavator2(_,X,Y);
@@ -27,48 +32,48 @@ issafe.
     !checkThis4(X,Y);
     !!checkExcavator1.
 
-+!checkExcavator1:  true <- .print("Waiting for mechanic at Excavator1.").
-+!checkExcavator2:  true <- .print("Waiting for mechanic at Excavator2.").
-+!checkExcavator3:  true <- .print("Waiting for mechanic at Excavator3.").
-+!checkExcavator4:  true <- .print("Waiting for mechanic at Excavator4.").
++!checkExcavator1:  true <- .print("waiting").
++!checkExcavator2:  true <- .print("waiting").
++!checkExcavator3:  true <- .print("waiting").
++!checkExcavator4:  true <- .print("waiting").
 
 +!checkThis1(X,Y) : jia.check(X,Y) <- true.
-+!checkThis1(X,Y) : true <- .print("Excavator1 is burning.");
++!checkThis1(X,Y) : true <- .print("Ég");
     .broadcast(tell, repair(X + 1,Y));
     !pos(X,Y);
-    .print("Help request sent to mechanic from Excavator1.");
+    .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis2(X,Y) : jia.check(X,Y) <- true.
-+!checkThis2(X,Y) : true <- .print("Excavator2 is burning.");
++!checkThis2(X,Y) : true <- .print("Ég");
     .broadcast(tell, repair(X + 1,Y));
     !pos(X,Y);
-    .print("Help request sent to mechanic from Excavator2.");
+    .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis3(X,Y) : jia.check(X,Y) <- true.
-+!checkThis3(X,Y) : true <- .print("Excavator2 is burning.");
++!checkThis3(X,Y) : true <- .print("Ég");
     .broadcast(tell, repair(X + 1,Y));
     !pos(X,Y);
-    .print("Help request sent to mechanic from Excavator3.");
+    .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis4(X,Y) : jia.check(X,Y) <- true.
-+!checkThis4(X,Y) : true <- .print("Excavator2 is burning.");
++!checkThis4(X,Y) : true <- .print("Ég");
     .broadcast(tell, repair(X + 1,Y));
     !pos(X,Y);
-    .print("Help request sent to mechanic from Excavator4.");
+    .print("Request sent to mechanic");
     -issafe.
 
-+keepmoving[source(mecha2)] : true <-
-    .print("The mechanic recieved the request");
++mehetTovabb[source(mecha2)] : true <-
+    .print("karbantarto sent done");
     +issafe;
-    -keepmoving[source(mecha2)];
+    -mehetTovabb[source(mecha2)];
     !checkExcavator1.
 
 +!pos(X,Y) : pos(X,Y) <- true.
 
-+!pos(X,Y) : pos(X,Y) <- .print("The drone has reached position ",X,", ",Y,".").
++!pos(X,Y) : pos(X,Y) <- .print("I've reached [",X,",",Y,"].").
 
 +!pos(X,Y) : not pos(X,Y) & issafe <-
     !next_step(X,Y);
@@ -79,10 +84,12 @@ issafe.
     -+last_dir(D);
     do(D).
 
+// I still do not know my position
 +!next_step(X,Y) : not pos(_,_) <- !next_step(X,Y).
 
+// failure handling -> start again!
 -!next_step(X,Y) : true <-
-    .print("The drone failed moving to ", X, ", ", Y, ", trying again!");
+    .print("Failed next_step to ", X, "x", Y, " fixing and trying again!");
     -+last_dir(null);
     !next_step(X,Y).
 
@@ -91,6 +98,11 @@ issafe.
     -+last_dir(D);
     do(D).
 
-+!next_step(X,Y) : not pos(_,_) <- 
+// I still do not know my position
++!next_step(X,Y) : not pos(_,_) <- !next_step(X,Y).
+
+// failure handling -> start again!
+-!next_step(X,Y) : true <-
+    .print("Failed next_step to ", X, "x", Y, " fixing and trying again!");
+    -+last_dir(null);
     !next_step(X,Y).
-    .print("The drone's next step can't be executed.").
