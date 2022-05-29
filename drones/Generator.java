@@ -119,7 +119,7 @@ public class Generator {
         for (int i = 0; i < num; i++) {
             int randomX = ThreadLocalRandom.current().nextInt(0, x);
             int randomY = ThreadLocalRandom.current().nextInt(0, y);
-            if (matrix[randomX][randomY].isIscave()) {
+            if (matrix[randomX][randomY].isIscave() && alledges(randomX, randomY)) {
                 tmp[i][0] = randomX;
                 tmp[i][1] = randomY;
             } else
@@ -127,6 +127,22 @@ public class Generator {
         }
         return tmp;
     }
+
+
+    public boolean alledges(int x, int y){
+        if (matrix[x + 1][y].isIscave() && 
+            matrix[x + 1][y + 1].isIscave() && 
+            matrix[x + 1][y - 1].isIscave() && 
+            matrix[x - 1][y].isIscave() && 
+            matrix[x - 1][y + 1].isIscave() && 
+            matrix[x - 1][y - 1].isIscave() && 
+            matrix[x][y + 1].isIscave() && 
+            matrix[x][y - 1].isIscave())
+            return true;
+
+        return false;
+    }
+
 
     public boolean myrand(int p) {
         int randomNum = ThreadLocalRandom.current().nextInt(0, 101);

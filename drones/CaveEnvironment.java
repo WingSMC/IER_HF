@@ -51,6 +51,7 @@ public class CaveEnvironment extends jason.environment.Environment {
     @Override
     public boolean executeAction(String ag, Structure action) {
         boolean result = false;
+
         try {
             if (sleep > 0) {
                 Thread.sleep(sleep);
@@ -94,6 +95,7 @@ public class CaveEnvironment extends jason.environment.Environment {
             addPercept(ASSyntax.createLiteral("poz", ASSyntax.createNumber(model.getMechaX()), ASSyntax.createNumber(model.getMechaY())));
             addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
             addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getMechaX() + "," + model.getMechaY() + ")"));
+            addPercept(Literal.parseLiteral("station(" + simId + "," + model.getDroneX() + "," + model.getDroneY() + ")"));
             addPercept(Literal.parseLiteral("excavator1(" + simId + "," + model.getExcavator(0).loc.x + "," + model.getExcavator(0).loc.y + ")"));
             addPercept(Literal.parseLiteral("excavator2(" + simId + "," + model.getExcavator(1).loc.x + "," + model.getExcavator(1).loc.y + ")"));
             addPercept(Literal.parseLiteral("excavator3(" + simId + "," + model.getExcavator(2).loc.x + "," + model.getExcavator(2).loc.y + ")"));
@@ -119,8 +121,6 @@ public class CaveEnvironment extends jason.environment.Environment {
 
     private void updateAgsPercept() {
         for (int i = 0; i < model.getNbOfAgs(); i++) {
-            System.out.println(model.getNbOfAgs());
-            System.out.println(i);
             updateAgPercept(i);
         }
     }

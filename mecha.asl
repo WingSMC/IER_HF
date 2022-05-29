@@ -9,17 +9,26 @@ last_dir(null). // the last movement I did
 /* Plans */
 +!wait : true <- !!wait.
 
-/* karbantartasra van sz ks g */
-+repair(X,Y)[source(drone1)] : ~resetloc
-    <-!poz(X,Y);
-    .print("repair");
-    jia.repair(X,Y);
-    -repair(X,Y)[source(drone1)];
-    +resetloc;
-    !poz(X,Y);
++!reset<-
+    ?station(_,X,Y);
+    .print(X, " ", Y);
+    !poz(X, Y);
     -resetloc;
     .print("sending done");
     .broadcast(tell,mehetTovabb).
+
+
+
+/* karbantartasra van sz ks g */
++repair(X,Y)[source(drone1)] : ~resetloc
+    <-!poz(X,Y);
+    .print("starting repair");
+    jia.repair(X,Y);
+    .print("finished repair");
+    -repair(X,Y)[source(drone1)];
+    +resetloc;
+    !!reset.
+
 
 /* Moving */
 +!poz(X,Y) : poz(X,Y) <- true.
@@ -32,7 +41,6 @@ last_dir(null). // the last movement I did
 
 +!next_step(X,Y):poz(AgX,AgY) <-
     jia.get_direction(AgX, AgY, X, Y, D);
-    .print("mecha ",AgX," ", AgY," ",X," ",Y);
     -+last_dir(D);
     do(D).
 
