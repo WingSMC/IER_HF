@@ -5,7 +5,7 @@ package drones;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Generator {
-    BlockTypeT[][] matrix;
+    BlockType[][] matrix;
     int[] start;
     int[] depot;
 
@@ -14,7 +14,7 @@ public class Generator {
             x = 3;
         if (y < 3)
             y = 3;
-        matrix = new BlockTypeT[x][y];
+        matrix = new BlockType[x][y];
         init();
         // at least 20% cave
         while (getcaveblocknum() < (x * y / 5)) {
@@ -29,7 +29,7 @@ public class Generator {
 
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                matrix[i][j] = new BlockTypeT();
+                matrix[i][j] = new BlockType();
             }
         }
 

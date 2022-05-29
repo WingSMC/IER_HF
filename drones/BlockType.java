@@ -1,11 +1,11 @@
 package drones;
 
-public class BlockTypeT {
+public class BlockType {
     boolean checked;
     boolean iscave;
     boolean iswall;
 
-    public BlockTypeT() {
+    public BlockType() {
         checked = false;
         iscave = false;
         iswall = false;

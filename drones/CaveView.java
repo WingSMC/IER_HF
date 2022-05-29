@@ -69,6 +69,7 @@ public class CaveView extends GridWorldView {
         super.drawAgent(g, x, y, c, -1);
         idColor = Color.white;
         g.setColor(idColor);
+        drawString(g, x, y, defaultFont, String.valueOf(id + 1));
     }
 
     @Override
@@ -78,16 +79,13 @@ public class CaveView extends GridWorldView {
         case CaveModel.DEPOT:
             g.setColor(Color.RED);
             g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
-            break;
+            return;
         case CaveModel.EXCAV:
             g.setColor(Color.YELLOW);
             g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
-            break;
+            return;
         case CaveModel.AGENT:
-            g.setColor(Color.BLUE);
-            drawString(g, x, y, defaultFont, String.valueOf(object + 1));
-            g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
-            break;
+            return;
         }
     }
 }
