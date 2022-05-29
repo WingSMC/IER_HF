@@ -23,7 +23,9 @@ public class repair extends DefaultInternalAction {
         var exR = model.getExcavator(x + 1, y);
         var exT = model.getExcavator(x, y - 1);
         var exB = model.getExcavator(x, y + 1);
+        System.out.println(exL + " " + exR + " " + exT + " " + exB);
         var ex = Stream.of(exL, exR, exT, exB).filter(e -> e != null && e.isFaulty()).findFirst().orElse(null);
+        System.out.println(ex);
         if (ex == null)
             return false;
         ex.isFaulty(false);
