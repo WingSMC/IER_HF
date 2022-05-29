@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -32,10 +33,16 @@ public class Excavator {
 	}
 
 	public void draw(java.awt.Graphics g, int cellSizeW, int cellSizeH) {
-		g.drawImage(Excavator.excavatorImg, loc.x * cellSizeW + 1, loc.y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2, null, null);
+		int x = loc.x * cellSizeW + 1;
+		int y = loc.y * cellSizeH + 1;
+		int dX = cellSizeW - 2;
+		int dY = cellSizeH - 2;
+		g.drawImage(Excavator.excavatorImg, x, y, dX, dY, Color.LIGHT_GRAY, null);
 		if (isFaulty) {
 			int halfCellW = cellSizeW / 2, halfCellH = cellSizeH / 2;
-			g.drawImage(Excavator.fireImg, loc.x * cellSizeW + 1, loc.y * cellSizeH + 1, halfCellW, halfCellH, null, null);
+			g.drawImage(Excavator.fireImg, x, y, halfCellW, halfCellH, null, null);
+			g.setColor(Color.RED);
+			g.drawRect(x, y, dX, dY);
 		}
 	}
 
@@ -43,10 +50,8 @@ public class Excavator {
 	public boolean isFaulty() {
 		this.isFaulty = new Random().nextInt(100) < 40;
 		System.out.println("loc: " + loc.x + " " + loc.y + "faulty: " + this.isFaulty);
-		return isFaulty; 
-		}
+		return isFaulty;
+	}
 
-	public void isFaulty(boolean isFaulty) {
-		this.isFaulty = isFaulty; 
-		}
+	public void isFaulty(boolean isFaulty) { this.isFaulty = isFaulty; }
 }
