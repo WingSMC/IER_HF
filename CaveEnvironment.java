@@ -1,44 +1,40 @@
 import jason.asSyntax.ASSyntax;
-import jason.asSyntax.Literal;
 import jason.asSyntax.Structure;
-import jason.environment.grid.Location;
 
 import java.util.logging.Logger;
 
+/** MAS environment */
 public class CaveEnvironment extends jason.environment.TimeSteppedEnvironment {
 
-    private Logger logger = Logger.getLogger("game-of-life.mas2j." + CaveEnvironment.class.getName());
+    private Logger logger = Logger.getLogger("drones.mas2j.CaveEnvironment");
 
-    private CaveModel model;
+    private CaveModel caveModel;
 
-    /** Called before the MAS execution with the args informed in .mas2j */
+    /** MAS init */
     @Override
     public void init(String[] args) {
-        super.init(new String[] { "3000" }); // set step timeout
+        super.init(new String[] { "1000" }); // max steps
         setOverActionsPolicy(OverActionsPolicy.ignoreSecond);
-        model = new CaveModel(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-        model.setView(new CaveView(model, this));
+        int size = Integer.parseInt(args[0]);
+        int density = Integer.parseInt(args[1]);
+        caveModel = new CaveModel(size, density);
+        caveModel.setView(new CaveView(caveModel, this));
         updateAgsPercept();
     }
 
     @Override
     public boolean executeAction(String agName, Structure action) {
         int ag = getAgIdBasedOnName(agName);
-        var loc = model.getAgPos(ag);
-        if (loc.x == 0 || loc.x == model.getWidth() - 1 || loc.y == 0 || loc.y == model.getHeight() - 1) {
-            model.alive(ag);
+        switch (action.getFunctor()) {
+        case default: // skip
+            return true;
+        case "die":
+            caveModel.dead(ag);
+            return true;
+        case "live":
+            caveModel.alive(ag);
             return true;
         }
-
-        String actId = action.getFunctor();
-        if (actId.equals("skip")) {
-            return true;
-        } else if (actId.equals("die")) {
-            model.dead(ag);
-        } else if (actId.equals("live")) {
-            model.alive(ag);
-        }
-        return true;
     }
 
     @Override
@@ -57,7 +53,7 @@ public class CaveEnvironment extends jason.environment.TimeSteppedEnvironment {
 
     @Override
     protected void updateAgsPercept() {
-        for (int i = 0; i < model.getNbOfAgs(); i++) {
+        for (int i = 0; i < caveModel.getNbOfAgs(); i++) {
             updateAgPercept(i);
         }
     }

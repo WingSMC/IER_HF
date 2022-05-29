@@ -2,48 +2,53 @@ package model;
 
 
 
-import java.util.List;
-import java.util.LinkedList;
+import jason.environment.grid.Location;
 
 public class Cell {
 	CellType type;
-	int x;
-	int y;
+	Location loc;
 	Cell[][] map;
-	List<Drone> drones = new LinkedList<>();
+	Actor agent;
 
 	public Cell(CellType type, int x, int y, Cell[][] map) {
 		this.type = type;
-		this.x = x;
-		this.y = y;
+		this.loc = new Location(x, y);
 		this.map = map;
 	}
 
-	public CellType getType() { return type; }
-
-	public void setType(CellType type) { this.type = type; }
-
-	public boolean isWall() { return type == CellType.WALL; }
-
 	public boolean isEmpty() { return type == CellType.EMPTY; }
 
-	public boolean isUnknown() { return type == CellType.UNKNOWN; }
-
 	public boolean hasEmptyNeighbor() {
-		if (map[x - 1][y].isEmpty() || map[x][y - 1].isEmpty() || map[x][y + 1].isEmpty() || map[x + 1][y].isEmpty())
-			return true;
-		return false;
+		int x = loc.x;
+		int y = loc.y;
+		return map[x - 1][y].isEmpty() || map[x][y - 1].isEmpty() || map[x][y + 1].isEmpty() || map[x + 1][y].isEmpty();
 	}
 
-	public int getX() { return x; }
+	public boolean isReachable() { return (type != CellType.WALL) && hasEmptyNeighbor(); }
 
-	public int getY() { return y; }
+	public boolean enter(Actor ag) {
+		if (agent != null)
+			return false;
+		agent = ag;
+		return true;
+	}
 
-	public Cell[][] getMap() { return map; }
+	public void leave(Actor drone) { agent = null; }
 
-	public boolean isReachable() { return type != CellType.WALL && hasEmptyNeighbor(); }
+	public Cell getNeighbour(Direction dir) {
+		int x = loc.x;
+		int y = loc.y;
+		return switch (dir) {
+		case NORTH -> map[x][y - 1];
+		case SOUTH -> map[x][y + 1];
+		case EAST -> map[x + 1][y];
+		case WEST -> map[x - 1][y];
+		};
+	}
+}
 
-	public void enter(Drone drone) { drones.add(drone); }
 
-	public void leave(Drone drone) { drones.remove(drone); }
+
+enum CellType {
+	EMPTY, WALL, UNKNOWN;
 }

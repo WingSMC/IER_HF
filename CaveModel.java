@@ -1,22 +1,24 @@
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
+import model.Cell;
+import model.Drone;
+import model.MapGenerator;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Map */
 public class CaveModel extends GridWorldModel {
     public static final int DRONE = 16;
+    public Cell[][] map;
+    public List<Drone> drones = new ArrayList<>();
 
     public CaveModel(int size, int density) {
         super(size, size, size * size);
+        map = MapGenerator.generate(size, density);
 
-        // initial agents' state (alive or dead)
         try {
-            for (int i = 0; i < size; i++) {
-                int ag = getAgId(i, j);
-                setAgPos(ag, i, j);
-                alive(ag);
-            }
+            // drones
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -25,13 +27,7 @@ public class CaveModel extends GridWorldModel {
     @Override
     public Location getAgPos(int ag) { return new Location(ag / getWidth(), ag % getWidth()); }
 
-    int getAgId(int x, int y) { return x * getWidth() + y; }
-
     void alive(int ag) { add(DRONE, getAgPos(ag)); }
-
-    boolean isAlive(int ag) { return hasObject(DRONE, getAgPos(ag)); }
-
-    boolean isAlive(int x, int y) { return hasObject(DRONE, x, y); }
 
     void dead(int ag) { remove(DRONE, getAgPos(ag)); }
 }
