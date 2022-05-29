@@ -10,26 +10,26 @@ issafe.
 +!checkExcavator1:  issafe  <-
     ?excavator1(_,X,Y);
     !pos(X,Y);
-    !checkThis(X,Y);
+    !checkThis1(X,Y);
     !!checkExcavator2.
 
 
 +!checkExcavator2:  issafe  <-
     ?excavator2(_,X,Y);
     !pos(X,Y);
-    !checkThis(X,Y);
+    !checkThis2(X,Y);
     !!checkExcavator3.
 
 +!checkExcavator3:  issafe  <-
     ?excavator3(_,X,Y);
     !pos(X,Y);
-    !checkThis(X,Y);
+    !checkThis3(X,Y);
     !!checkExcavator4.
 
 +!checkExcavator4:  issafe  <-
     ?excavator4(_,X,Y);
     !pos(X,Y);
-    !checkThis(X,Y);
+    !checkThis4(X,Y);
     !!checkExcavator1.
 
 +!checkExcavator1:  true <- .print("waiting").
@@ -37,9 +37,29 @@ issafe.
 +!checkExcavator3:  true <- .print("waiting").
 +!checkExcavator4:  true <- .print("waiting").
 
-+!checkThis(X,Y) : jia.check(X,Y) <- true.
++!checkThis1(X,Y) : jia.check(X,Y) <- true.
++!checkThis1(X,Y) : true <- .print("Ég");
+    .broadcast(tell, repair(X + 1,Y));
+    !pos(X,Y);
+    .print("Request sent to mechanic");
+    -issafe.
 
-+!checkThis(X,Y) : true <- .print("Ég");
++!checkThis2(X,Y) : jia.check(X,Y) <- true.
++!checkThis2(X,Y) : true <- .print("Ég");
+    .broadcast(tell, repair(X + 1,Y));
+    !pos(X,Y);
+    .print("Request sent to mechanic");
+    -issafe.
+
++!checkThis3(X,Y) : jia.check(X,Y) <- true.
++!checkThis3(X,Y) : true <- .print("Ég");
+    .broadcast(tell, repair(X + 1,Y));
+    !pos(X,Y);
+    .print("Request sent to mechanic");
+    -issafe.
+
++!checkThis4(X,Y) : jia.check(X,Y) <- true.
++!checkThis4(X,Y) : true <- .print("Ég");
     .broadcast(tell, repair(X + 1,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
