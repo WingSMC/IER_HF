@@ -4,24 +4,23 @@ package drones;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class tester {
-    Blocktype[][] matrix;
+public class Generator {
+    BlockTypeT[][] matrix;
     int[] start;
     int[] depot;
 
-    public tester(int x, int y) {
+    public Generator(int x, int y) {
         if (x < 3)
             x = 3;
         if (y < 3)
             y = 3;
-        matrix = new Blocktype[x][y];
+        matrix = new BlockTypeT[x][y];
         init();
         // at least 20% cave
-        while (getcaveblocknum() < x * y / 5) {
+        while (getcaveblocknum() < (x * y / 5)) {
             init();
             create_tunnels();
         }
-        print();
     }
 
     public void init() {
@@ -30,7 +29,7 @@ public class tester {
 
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                matrix[i][j] = new Blocktype();
+                matrix[i][j] = new BlockTypeT();
             }
         }
 
@@ -134,29 +133,9 @@ public class tester {
         return randomNum < p;
     }
 
-    public void print() {
-        int x = matrix.length;
-        int y = matrix[0].length;
-
-        System.out.println("x: " + Integer.toString(x) + ", y: " + Integer.toString(y));
-        System.out.println("^^^^^^^^^^");
-
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                if (matrix[i][j].isIscave())
-                    System.out.print(' ');
-                else
-                    System.out.print('X');
-            }
-            System.out.print('\n');
-        }
-        System.out.println("^^^^^^^^^^");
-    }
-
     public boolean checkloop() {
         int x = matrix.length;
         int y = matrix[0].length;
-
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (matrix[i][j].isIscave() && !matrix[i][j].isChecked() && !matrix[i][j].iswall)

@@ -53,8 +53,6 @@ public class CaveModel extends GridWorldModel {
 
     public void setId(String id) { this.id = id; }
 
-    public String toString() { return id; }
-
     public int getDroneX() { return startpoz.x; }
 
     public int getDroneY() { return startpoz.y; }
@@ -117,7 +115,7 @@ public class CaveModel extends GridWorldModel {
         CaveModel model = CaveModel.create(x, y, 3);
         model.setId("Scenario 5");
 
-        tester gen = new tester(x, y);
+        Generator gen = new Generator(x, y);
 
         boolean[][] blueprint = gen.getMatrix();
         int[] startloc = gen.getStart();
@@ -125,12 +123,8 @@ public class CaveModel extends GridWorldModel {
         model.startpoz = new Location(startloc[0], startloc[1]);
 
         int[][] excavator_loc = gen.generate_excavator(4);
-        for (int i = 0; i < 4; i++) {
-            System.out.println("excavator: " + excavator_loc[i][0] + " " + excavator_loc[i][1]);
-        }
 
         model.setExcavator(excavator_loc);
-
         model.setAgPos(0, startloc[0], startloc[1]);
         model.setAgPos(1, startloc[0], startloc[1]);
         // nem rajzolódik meg
@@ -150,4 +144,7 @@ public class CaveModel extends GridWorldModel {
         return model;
     }
 
+
+    @Override
+    public String toString() { return id; }
 }

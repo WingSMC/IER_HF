@@ -18,9 +18,11 @@ import javax.swing.JPanel;
 public class CaveView extends GridWorldView {
     private Logger logger = Logger.getLogger("drones.mas2j." + this.getClass().getSimpleName());
     CaveEnvironment env = null;
+    CaveModel model;
 
     public CaveView(CaveModel model, CaveEnvironment env) {
         super(model, "Drones", 600);
+        this.model = model;
         this.env = env;
         setVisible(true);
         repaint();
@@ -67,7 +69,6 @@ public class CaveView extends GridWorldView {
         super.drawAgent(g, x, y, c, -1);
         idColor = Color.white;
         g.setColor(idColor);
-        drawString(g, x, y, defaultFont, String.valueOf(id + 1));
     }
 
     @Override
@@ -80,6 +81,11 @@ public class CaveView extends GridWorldView {
             break;
         case CaveModel.EXCAV:
             g.setColor(Color.YELLOW);
+            g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
+            break;
+        case CaveModel.AGENT:
+            g.setColor(Color.BLUE);
+            drawString(g, x, y, defaultFont, String.valueOf(object + 1));
             g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
             break;
         }
