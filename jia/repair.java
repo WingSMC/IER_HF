@@ -14,8 +14,9 @@ public class repair extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] terms) throws Exception {
-        int i = (int) ((NumberTerm) terms[0]).solve();
-        var ex = model.getExcavator(i);
+        int x = (int) ((NumberTerm) terms[0]).solve();
+        int y = (int) ((NumberTerm) terms[1]).solve();
+        var ex = model.getExcavator(x, y);
         if (ex == null)
             return false;
         ex.isFaulty(false);
