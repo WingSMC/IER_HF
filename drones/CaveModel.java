@@ -121,7 +121,6 @@ public class CaveModel extends GridWorldModel {
         int[][] excavator_loc = gen.generate_excavator(4);
 
         model.setExcavator(excavator_loc);
-        model.setObject(DEPOT, depotloc[0], depotloc[1]);
         model.setAgPos(0, startloc[0], startloc[1]);
         model.setAgPos(1, depotloc[0], depotloc[1]);
         for (final var exc : excavator_loc) {
