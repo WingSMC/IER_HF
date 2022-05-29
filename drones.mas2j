@@ -2,7 +2,7 @@ MAS drones {
     infrastructure: Local
 
     // simId, agentSleep (μs), make GUI (yes/*), map size (recommended minimum 20)
-    environment: drones.CaveEnvironment(0,50,yes,20)
+    environment: drones.CaveEnvironment(0,50,yes,35)
 
     agents:
         mecha2 mecha;

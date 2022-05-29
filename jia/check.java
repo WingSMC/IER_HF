@@ -18,6 +18,6 @@ public class check extends DefaultInternalAction {
         var ex = model.getExcavator(i);
         if (ex == null)
             return false;
-        return !ex.isFaulty();
+        return !ex.randomIsFaulty();
     }
 }

@@ -38,29 +38,29 @@ issafe.
 +!checkExcavator4:  true <- .print("waiting").
 
 +!checkThis1(X,Y) : jia.check(0) <- true.
-+!checkThis1(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repairsignal(X,Y));
++!checkThis1(X,Y) : true <- .print("Fire");
+    .broadcast(tell, repairsignal(X + 1,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis2(X,Y) : jia.check(1) <- true.
-+!checkThis2(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repairsignal(X,Y));
++!checkThis2(X,Y) : true <- .print("Fire");
+    .broadcast(tell, repairsignal(X + 1,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis3(X,Y) : jia.check(2) <- true.
-+!checkThis3(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repairsignal(X,Y));
++!checkThis3(X,Y) : true <- .print("Fire");
+    .broadcast(tell, repairsignal(X + 1,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.
 
 +!checkThis4(X,Y) : jia.check(3) <- true.
-+!checkThis4(X,Y) : true <- .print("Ég");
-    .broadcast(tell, repairsignal(X,Y));
++!checkThis4(X,Y) : true <- .print("Fire");
+    .broadcast(tell, repairsignal(X + 1,Y));
     !pos(X,Y);
     .print("Request sent to mechanic");
     -issafe.
