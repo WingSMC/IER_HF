@@ -31,5 +31,6 @@ bin/
 .history
 .idea
 *.*~
+\#*
 *log*
 *__MAS

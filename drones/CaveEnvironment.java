@@ -19,10 +19,9 @@ public class CaveEnvironment extends jason.environment.Environment {
     CaveModel model;
     CaveView view;
 
-    int simId = 3; // type of environment
+    int simId = 0;
     int nbWorlds = 3;
-
-    int sleep = 0;
+    int sleep = 50;
     boolean running = true;
     boolean hasGUI = true;
 
@@ -32,9 +31,10 @@ public class CaveEnvironment extends jason.environment.Environment {
 
     @Override
     public void init(String[] args) {
-        hasGUI = args[2].equals("yes");
+        this.simId = Integer.parseInt(args[0]);
         sleep = Integer.parseInt(args[1]);
-        initWorld(Integer.parseInt(args[0]));
+        hasGUI = args[2].equals("yes");
+        initWorld();
     }
 
     public int getSimId() { return simId; }
@@ -88,8 +88,7 @@ public class CaveEnvironment extends jason.environment.Environment {
 
     private int getAgIdBasedOnName(String agName) { return (Integer.parseInt(agName.substring(5))) - 1; }
 
-    public void initWorld(int w) {
-        simId = w;
+    public void initWorld() {
         try {
             model = CaveModel.world();
         } catch (Exception e) {

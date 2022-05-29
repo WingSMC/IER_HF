@@ -1,4 +1,5 @@
 MAS drones {
+    infrastructure: Local
 
     environment: drones.CaveEnvironment(3,50,yes)
 
