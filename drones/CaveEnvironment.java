@@ -102,7 +102,7 @@ public class CaveEnvironment extends jason.environment.Environment {
             addPercept(ASSyntax.createLiteral("pos", ASSyntax.createNumber(model.getDroneX()), ASSyntax.createNumber(model.getDroneY())));
             addPercept(ASSyntax.createLiteral("poz", ASSyntax.createNumber(model.getMechaX()), ASSyntax.createNumber(model.getMechaY())));
             addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
-            addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getDepot().x + "," + model.getDepot().y + ")"));
+            addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getMechaX().x + "," + model.getMechaY().y + ")"));
             addPercept(Literal.parseLiteral("excavator1(" + simId + "," + model.getExcavator(0).x + "," + model.getExcavator(0).y + ")"));
             addPercept(Literal.parseLiteral("excavator2(" + simId + "," + model.getExcavator(1).x + "," + model.getExcavator(1).y + ")"));
             addPercept(Literal.parseLiteral("excavator3(" + simId + "," + model.getExcavator(2).x + "," + model.getExcavator(2).y + ")"));
