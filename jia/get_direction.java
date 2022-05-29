@@ -1,5 +1,7 @@
 package jia;
 
+
+
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
@@ -12,12 +14,12 @@ import jason.environment.grid.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-import mining.WorldModel;
 import busca.AEstrela;
 import busca.Busca;
 import busca.Estado;
 import busca.Heuristica;
 import busca.Nodo;
+import drones.CaveModel;
 
 public class get_direction extends DefaultInternalAction {
 
@@ -26,25 +28,28 @@ public class get_direction extends DefaultInternalAction {
         try {
             String sAction = "skip";
 
-            WorldModel model = WorldModel.get();
+            CaveModel model = CaveModel.get();
 
-            int iagx = (int)((NumberTerm)terms[0]).solve();
-            int iagy = (int)((NumberTerm)terms[1]).solve();
-            int itox = (int)((NumberTerm)terms[2]).solve();
-            int itoy = (int)((NumberTerm)terms[3]).solve();
+            int iagx = (int) ((NumberTerm) terms[0]).solve();
+            int iagy = (int) ((NumberTerm) terms[1]).solve();
+            int itox = (int) ((NumberTerm) terms[2]).solve();
+            int itoy = (int) ((NumberTerm) terms[3]).solve();
 
-            if (model.inGrid(itox,itoy)) {
+            if (model.inGrid(itox, itoy)) {
                 Busca searchAlg = new AEstrela();
-                //searchAlg.setMaxAbertos(1000);
+                // searchAlg.setMaxAbertos(1000);
                 Location lini = new Location(iagx, iagy);
 
                 // destination should be a free place
-                while (!model.isFreeOfObstacle(itox,itoy) && itox > 0) itox--;
-                while (!model.isFreeOfObstacle(itox,itoy) && itox < model.getWidth()) itox++;
+                while (!model.isFreeOfObstacle(itox, itoy) && itox > 0)
+                    itox--;
+                while (!model.isFreeOfObstacle(itox, itoy) && itox < model.getWidth())
+                    itox++;
 
-                Nodo solution = searchAlg.busca(new GridState(lini, lini,new Location(itox, itoy), model, "initial"));
+                Nodo solution = searchAlg.busca(new GridState(lini, lini, new Location(itox, itoy), model, "initial"));
                 if (solution != null) {
-                    //System.out.println(iagx+"-"+iagy+"/"+itox+"-"+itoy+" = "+solution.montaCaminho());
+                    // System.out.println(iagx+"-"+iagy+"/"+itox+"-"+itoy+" =
+                    // "+solution.montaCaminho());
                     Nodo root = solution;
                     Estado prev1 = null;
                     Estado prev2 = null;
@@ -54,10 +59,11 @@ public class get_direction extends DefaultInternalAction {
                         root = root.getPai();
                     }
                     if (prev2 != null) {
-                        sAction =  ((GridState)prev2).op;
+                        sAction = ((GridState) prev2).op;
                     }
                 } else {
-                    //System.out.println("No route from "+iagx+"x"+iagy+" to "+itox+"x"+itoy+"!");
+                    // System.out.println("No route from "+iagx+"x"+iagy+" to
+                    // "+itox+"x"+itoy+"!");
                 }
             }
             return un.unifies(terms[4], new Atom(sAction));
@@ -68,11 +74,13 @@ public class get_direction extends DefaultInternalAction {
     }
 }
 
+
+
 class GridState implements Estado, Heuristica {
 
     // State information
     Location pos; // current location
-    Location from,to;
+    Location from, to;
     String op;
     GridWorldModel model;
 
@@ -84,51 +92,40 @@ class GridState implements Estado, Heuristica {
         this.op = op;
     }
 
-    public int custo() {
-        return 1;
-    }
+    public int custo() { return 1; }
 
-    public boolean ehMeta() {
-        return pos.equals(to);
-    }
+    public boolean ehMeta() { return pos.equals(to); }
 
-    public String getDescricao() {
-        return "Grid search";
-    }
+    public String getDescricao() { return "Grid search"; }
 
-    public int h() {
-        return pos.distance(to);
-    }
+    public int h() { return pos.distance(to); }
 
     public List<Estado> sucessores() {
         List<Estado> s = new ArrayList<Estado>(4);
         // four directions
-        suc(s,new Location(pos.x-1,pos.y),"left");
-        suc(s,new Location(pos.x+1,pos.y),"right");
-        suc(s,new Location(pos.x,pos.y-1),"up");
-        suc(s,new Location(pos.x,pos.y+1),"down");
+        suc(s, new Location(pos.x - 1, pos.y), "left");
+        suc(s, new Location(pos.x + 1, pos.y), "right");
+        suc(s, new Location(pos.x, pos.y - 1), "up");
+        suc(s, new Location(pos.x, pos.y + 1), "down");
         return s;
     }
 
     private void suc(List<Estado> s, Location newl, String op) {
         if (model.isFree(newl) || (from.distance(newl) > 3 && model.isFreeOfObstacle(newl))) {
-            s.add(new GridState(newl,from,to,model,op));
+            s.add(new GridState(newl, from, to, model, op));
         }
     }
 
     public boolean equals(Object o) {
         try {
-            GridState m = (GridState)o;
+            GridState m = (GridState) o;
             return pos.equals(m.pos);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return false;
     }
 
-    public int hashCode() {
-        return pos.hashCode();
-    }
+    public int hashCode() { return pos.hashCode(); }
 
-    public String toString() {
-        return "(" + pos + "-" + op + ")";
-    }
+    public String toString() { return "(" + pos + "-" + op + ")"; }
 }

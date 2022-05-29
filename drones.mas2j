@@ -1,0 +1,9 @@
+MAS drones {
+
+    environment: drones.CaveEnvironment(3,50,yes)
+
+    agents:
+        drone #2;
+        mecha #1;
+
+}

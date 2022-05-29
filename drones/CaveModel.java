@@ -1,4 +1,4 @@
-package mining;
+package drones;
 
 
 
@@ -9,48 +9,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import mining.MiningPlanet.Move;
+import drones.CaveEnvironment.Move;
 
-public class WorldModel extends GridWorldModel {
-
-    public static final int DEPOT = 8;
-    public static final int GOLD = 16;
-    public static final int EXCAVATOR = 32;
-    public static final int ENEMY = 64;
+public class CaveModel extends GridWorldModel {
+    // 0:clean; 2:agent; 4:obstacle
+    public static final int DEPOT = 1 << 3;
+    public static final int EXCAV = 1 << 4;
 
     Location depot;
     Location startpoz;
-    int goldsInDepot = 0;
-    int initialNbGolds = 0;
     public final List<Location> excavators = new ArrayList<>();
 
-    private Logger logger = Logger.getLogger("jasonTeamSimLocal.mas2j." + WorldModel.class.getName());
+    private Logger logger = Logger.getLogger("drones.mas2j." + this.getClass().getSimpleName());
 
     private String id = "WorldModel";
 
-    // singleton pattern
-    protected static WorldModel model = null;
+    // singleton
+    protected static CaveModel model = null;
 
-    // width, heigth, number of agents
-    synchronized public static WorldModel create(int w, int h, int nbAgs) {
+    private CaveModel(int w, int h, int nbAgs) { super(w, h, nbAgs); }
+
+    synchronized public static CaveModel create(int w, int h, int nbAgs) {
         if (model == null) {
-            model = new WorldModel(w, h, nbAgs);
+            model = new CaveModel(w, h, nbAgs);
         }
         return model;
     }
 
-    public static WorldModel get() { return model; }
+    public static CaveModel get() { return model; }
 
     public static void destroy() { model = null; }
 
-    public void setDepot(int x, int y) {
+    public void setObject(int type, int x, int y) {
         depot = new Location(x, y);
-        data[x][y] = DEPOT;
+        data[x][y] |= type;
     }
 
-    public Location getDepot() { return depot; }
+    public void removeObject(int type, int x, int y) { data[x][y] &= ~type; }
 
-    private WorldModel(int w, int h, int nbAgs) { super(w, h, nbAgs); }
+    public Location getDepot() { return depot; }
 
     public String getId() { return id; }
 
@@ -63,7 +60,7 @@ public class WorldModel extends GridWorldModel {
     public int getDroneY() { return startpoz.y; }
 
     public Location getExcavator(int i) {
-        if (i <= 0 || excavators.size() < i)
+        if (i < 0 || excavators.size() <= i)
             return null;
         return excavators.get(i);
     }
@@ -79,13 +76,6 @@ public class WorldModel extends GridWorldModel {
          * EXCAVATOR; data[1][8] = EXCAVATOR;
          */
     }
-
-
-    public boolean isAllGoldsCollected() { return goldsInDepot == initialNbGolds; }
-
-    public void setInitialNbGolds(int i) { initialNbGolds = i; }
-
-    public int getInitialNbGolds() { return initialNbGolds; }
 
     /** Actions **/
     boolean move(Move dir, int ag) throws Exception {
@@ -121,10 +111,10 @@ public class WorldModel extends GridWorldModel {
 
 
     /** world with gold and obstacles */
-    static WorldModel world3() throws Exception {
+    static CaveModel world() throws Exception {
         int x = 35;
         int y = 35;
-        WorldModel model = WorldModel.create(x, y, 3);
+        CaveModel model = CaveModel.create(x, y, 3);
         model.setId("Scenario 5");
 
         tester gen = new tester(x, y);
@@ -145,18 +135,18 @@ public class WorldModel extends GridWorldModel {
         model.setAgPos(1, startloc[0], startloc[1]);
         // nem rajzolódik meg
         model.setAgPos(2, depotloc[0], depotloc[1]);
-
-        model.setDepot(depotloc[0], depotloc[1]);
+        model.setObject(DEPOT, depotloc[0], depotloc[1]);
+        for (final var exc : excavator_loc) {
+            model.setObject(EXCAV, exc[0], exc[1]);
+        }
 
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (!blueprint[i][j]) {
-                    model.add(WorldModel.OBSTACLE, i, j);
+                    model.add(CaveModel.OBSTACLE, i, j);
                 }
             }
         }
-
-        model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));
         return model;
     }
 

@@ -1,10 +1,8 @@
-package mining;
+package drones;
 
 
 
 import jason.asSyntax.ASSyntax;
-
-// Environment code for project jasonTeamSimLocal.mas2j
 
 import jason.asSyntax.Literal;
 import jason.asSyntax.Structure;
@@ -14,12 +12,12 @@ import jason.environment.grid.Location;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MiningPlanet extends jason.environment.Environment {
+public class CaveEnvironment extends jason.environment.Environment {
 
-    private Logger logger = Logger.getLogger("jasonTeamSimLocal.mas2j." + MiningPlanet.class.getName());
+    private Logger logger = Logger.getLogger("drones.mas2j." + this.getClass().getSimpleName());
 
-    WorldModel model;
-    WorldView view;
+    CaveModel model;
+    CaveView view;
 
     int simId = 3; // type of environment
     int nbWorlds = 3;
@@ -27,14 +25,6 @@ public class MiningPlanet extends jason.environment.Environment {
     int sleep = 0;
     boolean running = true;
     boolean hasGUI = true;
-
-    public static final int SIM_TIME = 60; // in seconds
-
-    Term up = Literal.parseLiteral("do(up)");
-    Term down = Literal.parseLiteral("do(down)");
-    Term right = Literal.parseLiteral("do(right)");
-    Term left = Literal.parseLiteral("do(left)");
-    Term skip = Literal.parseLiteral("do(skip)");
 
     public enum Move {
         UP, DOWN, RIGHT, LEFT
@@ -57,6 +47,12 @@ public class MiningPlanet extends jason.environment.Environment {
         super.stop();
     }
 
+    Term up = Literal.parseLiteral("do(up)");
+    Term down = Literal.parseLiteral("do(down)");
+    Term right = Literal.parseLiteral("do(right)");
+    Term left = Literal.parseLiteral("do(left)");
+    Term skip = Literal.parseLiteral("do(skip)");
+
     @Override
     public boolean executeAction(String ag, Structure action) {
         boolean result = false;
@@ -65,7 +61,6 @@ public class MiningPlanet extends jason.environment.Environment {
                 Thread.sleep(sleep);
             }
 
-            // get the agent id based on its name
             int agId = getAgIdBasedOnName(ag);
             System.out.println("name: " + ag + " id: " + agId);
             if (action.equals(up)) {
@@ -95,47 +90,31 @@ public class MiningPlanet extends jason.environment.Environment {
     private int getAgIdBasedOnName(String agName) { return (Integer.parseInt(agName.substring(5))) - 1; }
 
     public void initWorld(int w) {
+        simId = w;
         try {
-            simId = w;
-            switch (w) {
-            case 3:
-                try {
-                    model = WorldModel.world3();
-                    // logger.info(model.getId() + " world1 id");
-                } catch (Exception e1) {
-                    logger.warning("error creating world1" + e1.getMessage());
-                }
-                break;
-            default:
-                logger.info("Invalid index!");
-                return;
-            }
+            model = CaveModel.world();
+        } catch (Exception e) {
+            logger.warning("Error creating world: " + e.getMessage());
+        }
 
+        try {
             // perceptek hozzaadasa
             clearPercepts();
+            addPercept(ASSyntax.createLiteral("pos", ASSyntax.createNumber(model.getDroneX()), ASSyntax.createNumber(model.getDroneY())));
             addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
-            addPercept(
-                    Literal.parseLiteral("depot(" + simId + "," + model.getDepot().x + "," + model.getDepot().y + ")"));
-            addPercept(ASSyntax.createLiteral("pos", ASSyntax.createNumber(model.getDroneX()),
-                    ASSyntax.createNumber(model.getDroneY())));
-            addPercept(Literal.parseLiteral(
-                    "excavator1(" + simId + "," + model.getExcavator(1).x + "," + model.getExcavator(1).y + ")"));
-            addPercept(Literal.parseLiteral(
-                    "excavator2(" + simId + "," + model.getExcavator(2).x + "," + model.getExcavator(2).y + ")"));
-            addPercept(Literal.parseLiteral(
-                    "excavator3(" + simId + "," + model.getExcavator(3).x + "," + model.getExcavator(3).y + ")"));
-            addPercept(Literal.parseLiteral(
-                    "excavator4(" + simId + "," + model.getExcavator(4).x + "," + model.getExcavator(4).y + ")"));
+            addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getDepot().x + "," + model.getDepot().y + ")"));
+            addPercept(Literal.parseLiteral("excavator1(" + simId + "," + model.getExcavator(0).x + "," + model.getExcavator(0).y + ")"));
+            addPercept(Literal.parseLiteral("excavator2(" + simId + "," + model.getExcavator(1).x + "," + model.getExcavator(1).y + ")"));
+            addPercept(Literal.parseLiteral("excavator3(" + simId + "," + model.getExcavator(2).x + "," + model.getExcavator(2).y + ")"));
+            addPercept(Literal.parseLiteral("excavator4(" + simId + "," + model.getExcavator(3).x + "," + model.getExcavator(3).y + ")"));
 
             if (hasGUI) {
-                view = new WorldView(model);
-                view.setEnv(this);
+                view = new CaveView(model, this);
             }
             updateAgsPercept();
-
             informAgsEnvironmentChanged();
         } catch (Exception e) {
-            logger.warning("Error creating world " + e);
+            logger.warning("Error initializing world: " + e);
         }
     }
 
@@ -144,7 +123,7 @@ public class MiningPlanet extends jason.environment.Environment {
         informAgsEnvironmentChanged();
         if (view != null)
             view.setVisible(false);
-        WorldModel.destroy();
+        CaveModel.destroy();
     }
 
     private void updateAgsPercept() {
@@ -187,10 +166,10 @@ public class MiningPlanet extends jason.environment.Environment {
     private void updateAgPercept(String agName, int x, int y) {
         if (model == null || !model.inGrid(x, y))
             return;
-        if (model.hasObject(WorldModel.OBSTACLE, x, y)) {
+        if (model.hasObject(CaveModel.OBSTACLE, x, y)) {
             addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",obstacle)"));
         } else {
-            if (model.hasObject(WorldModel.AGENT, x, y)) {
+            if (model.hasObject(CaveModel.AGENT, x, y)) {
                 addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",ally)"));
             }
         }

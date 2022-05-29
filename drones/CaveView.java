@@ -1,4 +1,4 @@
-package mining;
+package drones;
 
 
 
@@ -8,23 +8,23 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 
-public class WorldView extends GridWorldView {
+public class CaveView extends GridWorldView {
+    private Logger logger = Logger.getLogger("drones.mas2j." + this.getClass().getSimpleName());
+    CaveEnvironment env = null;
 
-    MiningPlanet env = null;
-
-    public WorldView(WorldModel model) {
-        super(model, "Mining World", 600);
+    public CaveView(CaveModel model, CaveEnvironment env) {
+        super(model, "Drones", 600);
+        this.env = env;
         setVisible(true);
         repaint();
     }
-
-    public void setEnv(MiningPlanet env) { this.env = env; }
 
     @Override
     public void initComponents(int width) {
@@ -50,12 +50,13 @@ public class WorldView extends GridWorldView {
 
     @Override
     public void paint(Graphics g) {
+        logger.info("paint");
         super.paint(g);
-        var excavators = ((WorldModel) model).excavators;
+        var excavators = ((CaveModel) model).excavators;
         excavators.stream().forEach(e -> {
             int x = e.x;
             int y = e.y;
-            g.setColor(Color.GRAY);
+            g.setColor(Color.YELLOW);
             g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
         });
     }
@@ -69,8 +70,18 @@ public class WorldView extends GridWorldView {
         drawString(g, x, y, defaultFont, String.valueOf(id + 1));
     }
 
-    public static void main(String[] args) throws Exception {
-        MiningPlanet env = new MiningPlanet();
-        env.init(new String[] { "5", "50", "yes" });
+    @Override
+    public void draw(Graphics g, int x, int y, int object) {
+        super.draw(g, x, y, object);
+        switch (object) {
+        case CaveModel.DEPOT:
+            g.setColor(Color.RED);
+            g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
+            break;
+        case CaveModel.EXCAV:
+            g.setColor(Color.YELLOW);
+            g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
+            break;
+        }
     }
 }
