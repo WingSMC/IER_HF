@@ -53,7 +53,6 @@ public class Excavator {
 		return isFaulty;
 	}
 
-<<<<<<< HEAD
 	public boolean getIsFaulty() {
 		return isFaulty; 
 		}
@@ -62,7 +61,4 @@ public class Excavator {
 	public void isFaulty(boolean isFaulty) {
 		this.isFaulty = isFaulty; 
 		}
-=======
-	public void isFaulty(boolean isFaulty) { this.isFaulty = isFaulty; }
->>>>>>> 95be54bdd9c712a4b6400063754cf913c3dd5823
 }
