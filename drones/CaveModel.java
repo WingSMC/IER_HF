@@ -102,6 +102,17 @@ public class CaveModel extends GridWorldModel {
     @Override
     public String toString() { return id; }
 
+    public Location getAnyEmptyFieldNextoLocation(int x, int y) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (data[x + i][y + j] == CLEAN && !(i == 0 && j == 0)) {
+                    return new Location(x + i, y + j);
+                }
+            }
+        }
+        return null;
+    }
+
 
     /** world setup */
     static CaveModel world(int size) throws Exception {
