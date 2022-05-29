@@ -16,8 +16,8 @@ public class CaveModel extends GridWorldModel {
     public static final int DEPOT = 1 << 3;
     public static final int EXCAV = 1 << 4;
 
-    Location depot;
     Location startpoz;
+    Location depotpoz;
     public final List<Location> excavators = new ArrayList<>();
 
     private Logger logger = Logger.getLogger("drones.mas2j." + this.getClass().getSimpleName());
@@ -40,14 +40,9 @@ public class CaveModel extends GridWorldModel {
 
     public static void destroy() { model = null; }
 
-    public void setObject(int type, int x, int y) {
-        depot = new Location(x, y);
-        data[x][y] |= type;
-    }
+    public void setObject(int type, int x, int y) { data[x][y] |= type; }
 
     public void removeObject(int type, int x, int y) { data[x][y] &= ~type; }
-
-    public Location getDepot() { return depot; }
 
     public String getId() { return id; }
 
@@ -56,6 +51,10 @@ public class CaveModel extends GridWorldModel {
     public int getDroneX() { return startpoz.x; }
 
     public int getDroneY() { return startpoz.y; }
+
+    public int getMechaX() { return depotpoz.x; }
+
+    public int getMechaY() { return depotpoz.y; }
 
     public Location getExcavator(int i) {
         if (i < 0 || excavators.size() <= i)
@@ -69,10 +68,6 @@ public class CaveModel extends GridWorldModel {
         excavators.add(new Location(excavator_loc[1][0], excavator_loc[1][1]));
         excavators.add(new Location(excavator_loc[2][0], excavator_loc[2][1]));
         excavators.add(new Location(excavator_loc[3][0], excavator_loc[3][1]));
-        /*
-         * data[1][2] = EXCAVATOR; data[1][4] = EXCAVATOR; data[1][6] =
-         * EXCAVATOR; data[1][8] = EXCAVATOR;
-         */
     }
 
     /** Actions **/
@@ -112,7 +107,7 @@ public class CaveModel extends GridWorldModel {
     static CaveModel world() throws Exception {
         int x = 35;
         int y = 35;
-        CaveModel model = CaveModel.create(x, y, 3);
+        CaveModel model = CaveModel.create(x, y, 2);
         model.setId("Scenario 5");
 
         Generator gen = new Generator(x, y);
@@ -121,15 +116,14 @@ public class CaveModel extends GridWorldModel {
         int[] startloc = gen.getStart();
         int[] depotloc = gen.getDepot();
         model.startpoz = new Location(startloc[0], startloc[1]);
+        model.depotpoz = new Location(depotloc[0], depotloc[1]);
 
         int[][] excavator_loc = gen.generate_excavator(4);
 
         model.setExcavator(excavator_loc);
-        model.setAgPos(0, startloc[0], startloc[1]);
-        model.setAgPos(1, startloc[0], startloc[1]);
-        // nem rajzolódik meg
-        model.setAgPos(2, depotloc[0], depotloc[1]);
         model.setObject(DEPOT, depotloc[0], depotloc[1]);
+        model.setAgPos(0, startloc[0], startloc[1]);
+        model.setAgPos(1, depotloc[0], depotloc[1]);
         for (final var exc : excavator_loc) {
             model.setObject(EXCAV, exc[0], exc[1]);
         }
