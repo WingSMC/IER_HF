@@ -27,7 +27,7 @@ public class Excavator {
 	}
 
 	public Excavator(Location loc) {
-		isFaulty = new Random().nextInt(100) < 40;
+		isFaulty = false;
 		this.loc = loc;
 	}
 
@@ -39,7 +39,13 @@ public class Excavator {
 	}
 
 
-	public boolean isFaulty() { return isFaulty; }
+	public boolean isFaulty() {
+		this.isFaulty = new Random().nextInt(100) < 40;
+		System.out.println("loc: " + loc.x + " " + loc.y + "faulty: " + this.isFaulty);
+		return isFaulty; 
+		}
 
-	public void isFaulty(boolean isFaulty) { this.isFaulty = isFaulty; }
+	public void isFaulty(boolean isFaulty) {
+		this.isFaulty = isFaulty; 
+		}
 }
