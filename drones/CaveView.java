@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import drones.actor.Drone;
 import drones.actor.Mechanic;
+import drones.actor.Depot;
 
 
 public class CaveView extends GridWorldView {
@@ -58,11 +59,11 @@ public class CaveView extends GridWorldView {
 
         switch (id) {
         case 1:
-            Drone.draw(g, x, y, cellSizeW, cellSizeH);
+            Mechanic.draw(g, x, y, cellSizeW, cellSizeH);
             return;
 
         default:
-            Mechanic.draw(g, x, y, cellSizeW, cellSizeH);
+            Drone.draw(g, x, y, cellSizeW, cellSizeH);
             return;
         }
     }
@@ -71,8 +72,9 @@ public class CaveView extends GridWorldView {
     public void draw(Graphics g, int x, int y, int object) {
         switch (object) {
         case CaveModel.DEPOT:
-            g.setColor(Color.YELLOW);
-            g.fillOval(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 2, cellSizeH - 2);
+            x = x * cellSizeW + 1;
+            y = y * cellSizeH + 1;
+            Depot.draw(g, x, y, cellSizeW, cellSizeH);
             return;
         case CaveModel.EXCAV:
             var excav = model.getExcavator(x, y);
