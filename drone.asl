@@ -31,20 +31,22 @@ onfire.
   !!checkExcavator1.
  
 
- +!checkExcavator1:  true <- .print("waiting1").
- +!checkExcavator2:  true <- .print("waiting2").
- +!checkExcavator3:  true <- .print("waiting3").
- +!checkExcavator4:  true <- .print("waiting4").
+ +!checkExcavator1:  true <- .print("waiting").
+ +!checkExcavator2:  true <- .print("waiting").
+ +!checkExcavator3:  true <- .print("waiting").
+ +!checkExcavator4:  true <- .print("waiting").
 
 +!checkThis(X,Y) : jia.check(X,Y) <- true.
-+!checkThis(X,Y) : true <- .print("ÉgS" , Y);
-!pos(X,Y);
++!checkThis(X,Y) : true <- .print("Ég");
+.print(X,Y);
 .broadcast(tell, repair(X,Y));
+  !pos(X + 1,Y);
+.print("Request sent to mechanic");
 -onfire.
 
-+mehetTovabb[source(mechanic2)] : true <- .print("karbantarto sent done");
++mehetTovabb[source(mecha2)] : true <- .print("karbantarto sent done");
 +nemkelljavitas;
--mehetTovabb[source(mechanic2)];
+-mehetTovabb[source(mecha2)];
 !checkSensor1.
 
 +!pos(X,Y) : pos(X,Y) <- true.
@@ -53,12 +55,13 @@ onfire.
 
 +!pos(X,Y) : not pos(X,Y) & onfire <- !next_step(X,Y);
 !pos(X,Y).
-+!next_step(X,Y)
-:  pos(AgX,AgY)
+
++!next_step(X,Y):pos(AgX,AgY)
 <- jia.get_direction(AgX, AgY, X, Y, D);
+.print("drone ",AgX," ", AgY," ",X," ",Y);
 -+last_dir(D);
 do(D).
-  
+
 +!next_step(X,Y) : not pos(_,_) // I still do not know my position
 <- !next_step(X,Y).
    

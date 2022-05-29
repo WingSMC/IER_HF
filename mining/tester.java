@@ -131,6 +131,7 @@ public class tester {
         return tmp;
     }
 
+
     public boolean myrand(int p){
         int randomNum = ThreadLocalRandom.current().nextInt(0, 101);
         return randomNum < p;

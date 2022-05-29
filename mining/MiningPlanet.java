@@ -62,6 +62,7 @@ public class MiningPlanet extends jason.environment.Environment {
     @Override
     public boolean executeAction(String ag, Structure action) {
         boolean result = false;
+        System.out.println("name: " + ag + ", action: " + action);
         try {
             if (sleep > 0) {
                 Thread.sleep(sleep);
@@ -69,7 +70,6 @@ public class MiningPlanet extends jason.environment.Environment {
 
             // get the agent id based on its name
             int agId = getAgIdBasedOnName(ag);
-            System.out.println("name: " + ag + " id: " + agId);
             if (action.equals(up)) {
                 result = model.move(Move.UP, agId);
             } else if (action.equals(down)) {
@@ -117,7 +117,8 @@ public class MiningPlanet extends jason.environment.Environment {
                clearPercepts();
                addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
                addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getDepot().x + "," + model.getDepot().y + ")"));
-               addPercept(ASSyntax.createLiteral("pos", ASSyntax.createNumber(model.getDroneX()), ASSyntax.createNumber(model.getDroneY())));
+               addPercept(ASSyntax.createLiteral("pot", ASSyntax.createNumber(model.getDroneX()), ASSyntax.createNumber(model.getDroneY())));
+               addPercept(ASSyntax.createLiteral("poz", ASSyntax.createNumber(model.getMechaX()), ASSyntax.createNumber(model.getMechaY())));
                addPercept(Literal.parseLiteral("excavator1(" + simId + "," + model.getExcavator(1).x + "," + model.getExcavator(1).y + ")"));
                addPercept(Literal.parseLiteral("excavator2(" + simId + "," + model.getExcavator(2).x + "," + model.getExcavator(2).y + ")"));
                addPercept(Literal.parseLiteral("excavator3(" + simId + "," + model.getExcavator(3).x + "," + model.getExcavator(3).y + ")"));
@@ -152,17 +153,34 @@ public class MiningPlanet extends jason.environment.Environment {
     }
 
     private void updateAgPercept(int ag) {
-        if(ag == 0) updateAgPercept("drone" + (ag + 1), ag);
-    	if(ag == 1) updateAgPercept("drone" + (ag + 1), ag);
-    	if(ag == 2) updateAgPercept("mechanic" + (ag + 1), ag);
+        if(ag == 0) updateAgPerceptDrone("drone" + (ag + 1), ag);
+    	if(ag == 1) updateAgPerceptMecha("mecha" + (ag + 1), ag);
 
     }
 
-    private void updateAgPercept(String agName, int ag) {
+    private void updateAgPerceptDrone(String agName, int ag) {
         clearPercepts(agName);
         // its location
         Location l = model.getAgPos(ag);
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
+
+        // what's around
+        updateAgPercept(agName, l.x - 1, l.y - 1);
+        updateAgPercept(agName, l.x - 1, l.y);
+        updateAgPercept(agName, l.x - 1, l.y + 1);
+        updateAgPercept(agName, l.x, l.y - 1);
+        updateAgPercept(agName, l.x, l.y);
+        updateAgPercept(agName, l.x, l.y + 1);
+        updateAgPercept(agName, l.x + 1, l.y - 1);
+        updateAgPercept(agName, l.x + 1, l.y);
+        updateAgPercept(agName, l.x + 1, l.y + 1);
+    }
+
+    private void updateAgPerceptMecha(String agName, int ag) {
+        clearPercepts(agName);
+        // its location
+        Location l = model.getAgPos(ag);
+        addPercept(agName, Literal.parseLiteral("poz(" + l.x + "," + l.y + ")"));
 
         // what's around
         updateAgPercept(agName, l.x - 1, l.y - 1);

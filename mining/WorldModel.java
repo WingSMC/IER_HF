@@ -18,6 +18,7 @@ public class WorldModel extends GridWorldModel {
 
     Location                  depot;
     Location                  startpoz;
+    Location                  depotpoz;
     int                       goldsInDepot   = 0;
     int                       initialNbGolds = 0;
     Location				  Excavator1;
@@ -79,16 +80,23 @@ public class WorldModel extends GridWorldModel {
         return startpoz.y;
     }
 
+    public int getMechaX(){
+        return depotpoz.x;
+    }
+
+    public int getMechaY(){
+        return depotpoz.y;
+    }
+
     public Location getExcavator(int i) {
     	logger.info("called");
     	switch (i) {
-    	case 1:    	logger.info("called1" + Excavator1.x); return Excavator1; 
+    	case 1: return Excavator1; 
     	case 2: return Excavator2;
     	case 3: return Excavator3;
     	case 4: return Excavator4;
     	}
-    	return null;
-    	
+    	return null; 	
     }
 
     
@@ -97,12 +105,6 @@ public class WorldModel extends GridWorldModel {
     	Excavator2 = new Location(excavator_loc[1][0], excavator_loc[1][1]);
     	Excavator3 = new Location(excavator_loc[2][0], excavator_loc[2][1]);
     	Excavator4 = new Location(excavator_loc[3][0], excavator_loc[3][1]);
-        /*
-        data[1][2] = EXCAVATOR;
-    	data[1][4] = EXCAVATOR;
-    	data[1][6] = EXCAVATOR;
-    	data[1][8] = EXCAVATOR;
-        */
     }
 
 
@@ -161,7 +163,7 @@ public class WorldModel extends GridWorldModel {
         int excavator_num = 4;
         int x = 35;
         int y = 35;
-        WorldModel model = WorldModel.create(x, y, 3);
+        WorldModel model = WorldModel.create(x, y, 2);
         model.setId("Scenario 5");
 
         tester gen = new tester(x, y);
@@ -170,6 +172,7 @@ public class WorldModel extends GridWorldModel {
         int[] startloc = gen.getStart();
         int[] depotloc = gen.getDepot();
         model.startpoz = new Location(startloc[0], startloc[1]);
+        model.depotpoz = new Location(depotloc[0], depotloc[1]);
 
         int[][] excavator_loc = gen.generate_excavator(4);
         for(int i = 0; i < 4; i++){
@@ -178,12 +181,11 @@ public class WorldModel extends GridWorldModel {
 
         model.setExcavator(excavator_loc);
 
-        model.setAgPos(0, startloc[0], startloc[1]);
-        model.setAgPos(1, startloc[0], startloc[1]);
-        //nem rajzolódik meg
-        model.setAgPos(2, depotloc[0], depotloc[1]);
-        
+                
         model.setDepot(depotloc[0], depotloc[1]);
+        model.setAgPos(0, startloc[0], startloc[1]);
+        model.setAgPos(1, depotloc[0], depotloc[1]);
+
         
         for(int i = 0; i < x; i++){
             for(int j = 0; j < y; j++){

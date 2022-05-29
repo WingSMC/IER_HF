@@ -56,3 +56,4 @@ public class random_direction extends DefaultInternalAction {
         }
     }
 }
+

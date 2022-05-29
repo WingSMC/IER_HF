@@ -14,7 +14,7 @@ public class check extends DefaultInternalAction {
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] terms) throws Exception {
         int randomNum = ThreadLocalRandom.current().nextInt(0, 100);
-        if(randomNum > 95)
+        if(randomNum > 75)
             return false;
         return true;
     }

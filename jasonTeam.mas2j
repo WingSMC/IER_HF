@@ -11,7 +11,8 @@ MAS drones {
         //             3. whether display the gui
 
     agents:
-        drone #2;
-        mecha #1;
+	    mecha2 mecha;
+        drone1 drone;
+
 
 }
