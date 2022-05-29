@@ -13,6 +13,9 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import drones.actor.Drone;
+import drones.actor.Mechanic;
+
 
 public class CaveView extends GridWorldView {
     CaveEnvironment env = null;
@@ -50,11 +53,18 @@ public class CaveView extends GridWorldView {
 
     @Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
-        Color idColor = Color.black;
-        super.drawAgent(g, x, y, c, -1);
-        idColor = Color.white;
-        g.setColor(idColor);
-        drawString(g, x, y, defaultFont, String.valueOf(id + 1));
+        x = x * cellSizeW + 1;
+        y = y * cellSizeH + 1;
+
+        switch (id) {
+        case 1:
+            Drone.draw(g, x, y, cellSizeW, cellSizeH);
+            return;
+
+        default:
+            Mechanic.draw(g, x, y, cellSizeW, cellSizeH);
+            return;
+        }
     }
 
     @Override
