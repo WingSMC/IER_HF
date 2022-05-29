@@ -1,12 +1,8 @@
-/* Initial beliefs and rules */
-
-last_dir(null). // the last movement I did
+last_dir(null).
 ~resetloc.
 
-/* Initial goals */
 !wait.
 
-/* Plans */
 +!wait : true <- !!wait.
 
 +!reset<-
@@ -14,17 +10,14 @@ last_dir(null). // the last movement I did
     .print(X, " ", Y);
     !poz(X, Y);
     -resetloc;
-    .print("sending done");
+    .print("Mechanic is back at the depot.");
     .broadcast(tell,mehetTovabb).
 
-
-
-/* karbantartasra van sz ks g */
 +repair(X,Y)[source(drone1)] : ~resetloc
     <-!poz(X,Y);
-    .print("starting repair");
+    .print("Mechanic started extingushing the fire.");
     jia.repair(X,Y);
-    .print("finished repair");
+    .print("Mechanic extinguished the fire.");
     -repair(X,Y)[source(drone1)];
     +resetloc;
     !!reset.
@@ -33,7 +26,7 @@ last_dir(null). // the last movement I did
 /* Moving */
 +!poz(X,Y) : poz(X,Y) <- true.
 
-+!poz(X,Y) : poz(X,Y) <- .print("I've reached ",X,"x",Y).
++!poz(X,Y) : poz(X,Y) <- .print("Mechanic reached position: ",X,", ",Y,".").
 
 +!poz(X,Y) : not poz(X,Y) <-
     !next_step(X,Y);
@@ -49,7 +42,7 @@ last_dir(null). // the last movement I did
 
 // failure handling -> start again!
 -!next_step(X,Y) : true <-
-    .print("Failed next_step to ", X, "x", Y, " fixing and trying again!");
+    .print("Mechanic failed moving to ", X, ", ", Y, ", trying again!");
     -+last_dir(null);
     !next_step(X,Y).
 
@@ -61,10 +54,3 @@ last_dir(null). // the last movement I did
 // I still do not know my position
 +!next_step(X,Y) : not poz(_,_) <-
     !next_step(X,Y);
-    .print("nextStepnotpos").
-
-// failure handling -> start again!
--!next_step(X,Y) : true <-
-    .print("Failed next_step to ", X,"x",Y," fixing and trying again!");
-    -+last_dir(null);
-    !next_step(X,Y).

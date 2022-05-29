@@ -97,7 +97,6 @@ public class CaveEnvironment extends jason.environment.Environment {
         }
 
         try {
-            // perceptek hozzaadasa
             clearPercepts();
             addPercept(ASSyntax.createLiteral("pos", ASSyntax.createNumber(model.getDroneX()), ASSyntax.createNumber(model.getDroneY())));
             addPercept(ASSyntax.createLiteral("poz", ASSyntax.createNumber(model.getMechaX()), ASSyntax.createNumber(model.getMechaY())));
