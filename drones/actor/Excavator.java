@@ -47,11 +47,18 @@ public class Excavator {
 	}
 
 
-	public boolean isFaulty() {
-		this.isFaulty = new Random().nextInt(100) < 40;
+	public boolean randomIsFaulty() {
+		this.isFaulty = new Random().nextInt(100) < 10;
 		System.out.println("faulty: " + this.isFaulty);
 		return isFaulty;
 	}
 
-	public void isFaulty(boolean isFaulty) { this.isFaulty = isFaulty; }
+	public boolean getIsFaulty() {
+		return isFaulty; 
+		}
+	
+
+	public void isFaulty(boolean isFaulty) {
+		this.isFaulty = isFaulty; 
+		}
 }
