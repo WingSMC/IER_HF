@@ -61,14 +61,14 @@ issafe.
     -issafe.
 
 +keepmoving[source(mecha2)] : true <-
-    .print("Mechanic recieved the request");
+    .print("The mechanic recieved the request");
     +issafe;
     -keepmoving[source(mecha2)];
     !checkExcavator1.
 
 +!pos(X,Y) : pos(X,Y) <- true.
 
-+!pos(X,Y) : pos(X,Y) <- .print("Drone has reached position ",X,", ",Y,".").
++!pos(X,Y) : pos(X,Y) <- .print("The drone has reached position ",X,", ",Y,".").
 
 +!pos(X,Y) : not pos(X,Y) & issafe <-
     !next_step(X,Y);
@@ -82,7 +82,7 @@ issafe.
 +!next_step(X,Y) : not pos(_,_) <- !next_step(X,Y).
 
 -!next_step(X,Y) : true <-
-    .print("Drone failed moving to ", X, ", ", Y, ", trying again!");
+    .print("The drone failed moving to ", X, ", ", Y, ", trying again!");
     -+last_dir(null);
     !next_step(X,Y).
 
@@ -91,4 +91,6 @@ issafe.
     -+last_dir(D);
     do(D).
 
-+!next_step(X,Y) : not pos(_,_) <- !next_step(X,Y).
++!next_step(X,Y) : not pos(_,_) <- 
+    !next_step(X,Y).
+    .print("The drone's next step can't be executed.").
