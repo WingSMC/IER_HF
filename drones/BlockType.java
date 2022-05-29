@@ -1,11 +1,11 @@
-package mining;
+package drones;
 
-public class Blocktype {
+public class BlockType {
     boolean checked;
     boolean iscave;
     boolean iswall;
 
-    public Blocktype() {
+    public BlockType() {
         checked = false;
         iscave = false;
         iswall = false;

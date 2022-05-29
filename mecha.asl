@@ -43,3 +43,18 @@ do(D).
 -+last_dir(null);
 !next_step(X,Y).
 
++!next_step(X,Y): poz(AgX,AgY) <-
+    jia.get_direction(AgX, AgY, X, Y, D);
+    -+last_dir(D);
+    do(D).
+
+// I still do not know my position
++!next_step(X,Y) : not poz(_,_) <-
+    !next_step(X,Y);
+    .print("nextStepnotpos").
+
+// failure handling -> start again!
+-!next_step(X,Y) : true <-
+    .print("Failed next_step to ", X,"x",Y," fixing and trying again!");
+    -+last_dir(null);
+    !next_step(X,Y).

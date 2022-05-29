@@ -1,5 +1,7 @@
 package jia;
 
+
+
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
@@ -9,7 +11,7 @@ import jason.asSyntax.Term;
 
 import java.util.Random;
 
-import mining.WorldModel;
+import drones.CaveModel;
 
 
 public class random_direction extends DefaultInternalAction {
@@ -20,7 +22,7 @@ public class random_direction extends DefaultInternalAction {
         try {
             String sAction = null;
 
-            WorldModel model = WorldModel.get();
+            CaveModel model = CaveModel.get();
 
             NumberTerm agx = (NumberTerm) terms[0];
             NumberTerm agy = (NumberTerm) terms[1];
